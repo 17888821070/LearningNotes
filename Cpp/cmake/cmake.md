@@ -152,8 +152,7 @@ set_target_properties (testFunc_static PROPERTIES OUTPUT_NAME "testFunc")
 set (LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 ```
 
-
-### 链接 pthread
+## 链接 pthread
 
 ```
 find_package (Threads)
@@ -161,7 +160,7 @@ find_package (Threads)
 target_link_libraries (myapp ${CMAKE_THREAD_LIBS_INIT})
 ```
 
-### 添加编译选项
+## 添加编译选项
 
 ```
 add_compile_options(-std=c++11 -Wall)
