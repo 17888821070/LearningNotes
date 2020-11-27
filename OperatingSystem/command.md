@@ -1,53 +1,92 @@
 # 常用命令
 
-## 查看进程状态
+## ps
 
 ```
 ps [options] [--help]
 
 -A 列出所有的行程
+
 -w 显示加宽可以显示较多的资讯
+
 -au 显示较详细的资讯
+
 -aux 显示所有包含其他使用者的行程
+
 USER: 行程拥有者
+
 %CPU: 占用的 CPU 使用率
 ```
 
-## 查看端口占用
+## lsof
 
-### lsof
+列出当前系统打开的文件
 
 ```
-lsof -i:端口号
-lsof abc.txt：显示开启文件abc.txt的进程
-lsof -c abc：显示abc进程现在打开的文件
+# 显示当前系统打开的文件
+lsof 
+
+# 查看某个用户打开的文件信息
+lsof -u username
+
+# 列出所有网络连接
+lsof -i
+
+# 列出所有 tcp 网络连接
+lsof -i tcp
+
+# 列出所有 udp 网络连接
+lsof -i udp
+
+# 列出端口号
+lsof -i:port
+
+# 显示 abc 进程现在打开的文件
+lsof -c abc
+
+# 通过某个进程号显示该进行打开的文件
+$lsof -p pid
 ```
 
-### netstat
+## netstat
 
 ```
 netstat -tunlp 用于显示 tcp，udp 的端口和进程等相关情况
+
+-a 列出所有端口使用情
+
 -t (tcp) 仅显示tcp相关选项
+
 -u (udp)仅显示udp相关选项
+
 -n 拒绝显示别名，能显示数字的全部转化为数字
+
 -l 仅列出在Listen(监听)的服务状态
+
 -p 显示建立相关链接的程序名
 ```
 
-## 杀死进程
+## kill
+
+将指定的信号发送到指定的进程或进程组，如果未指定信号，则发送TERM信号
 
 ```
-kill [-s <信息名称或编号>][程序]　或　kill [-l <信息编号>]
+kill [-s signal] pid
+
 kill 12345 杀死进程
+
 kill -KILL 123456 强制杀死进程
+
 kill -9 123456
 ```
 
-## 下载文件
+## wget
 
 ```
 wget url 下载单个文件
+
 wget -b URL 后台下载
+
 wget -c URL 支持断点续传
 ```
 
@@ -77,16 +116,27 @@ ifconfig -a
 
 ```
 apt-get update 更新源
+
 apt-get dist-upgrade 升级系统
+
 apt-get upgrade 更新所有已经安装的软件包
+
 apt-get install package_name 安装软件包(加上 --reinstall重新安装)
+
 apt-get remove 移除软件包（保留配置信息）
+
 apt-get purge package_name 移除软件包（删除配置信息）
+
 apt show pack_name 获取包的相关信息
+
 apt search page_name 搜索包的相关信息
+
 apt-cache depends package 了解使用依赖
+
 apt-get check 检查是否有损坏的依赖
+
 apt-get autoclean 清除那些已经卸载的软件包的.deb文件
+
 apt-get clean 将已安装软件包裹的.deb文件一并删除
 ```
 
@@ -118,11 +168,17 @@ top -p pidid：显示指定的进程信息
 
 // 交互命令
 k: 终止一个进程
+
 P：按 CPU 使用率排行
+
 M：按 MEM 排行
+
 1：显示各 CPU 情况
+
 q: 退出程序
+
 m: 切换显示内存信息模式
+
 t: 切换显示进程和 CPU 状态信息模型
 ```
 
@@ -160,12 +216,31 @@ S     -- 进程状态，D：不可中断的睡眠状态 R：运行 S：睡眠 T�
 
 %MEM  -- 进程使用的物理内存百分比
 
+## head & tail
 
+显示前几行或前几个字节
 
+```
+head [-n count | -c bytes] [file ...]
 
+-n 展示前 n 行
 
+-c 展示前 n 个字符
+```
 
+从尾部开始展示文本
 
+```
+tail [-n count | -c bytes] [file ...]
+
+-n 展示前 n 行
+
+-c 展示前 n 个字符
+```
+
+## more & less
+
+流式读取，支持翻页
 
 ## awk
 
@@ -207,3 +282,51 @@ sed 可依照脚本的指令来处理、编辑文本文件
 ## wc
 
 计算文件的行数、单次树、字节数
+
+```
+-c 统计字节数
+
+-l 统计行数
+
+-m 统计字符数
+```
+
+## which
+
+在 PATH 变量指定的路径中，搜索某个系统命令的位置，并且返回第一个搜索结果
+
+## whereis
+
+whereis命令只能用于程序名的搜索
+
+```
+-m  定位 man 说明帮助文件
+
+-s  定位源代码文件
+
+-b  定位可执行文件
+```
+
+## find
+
+对列出的每个路径递归地遍历目录树，根据树中的每个文件计算表达式
+
+```
+find [-H | -L | -P] [-EXdsx] [-f path] path ... [expression]
+
+-print：find 命令将匹配的文件输出到标准输出
+
+-exec：find 命令对匹配的文件执行该参数所给出的 shell 命令，以 \; 为结束标志
+
+-name：按照文件名查找文件
+
+-user：按照文件属主来查找文件
+
+-group：按照文件所属的组来查找文件
+
+# 查找目录下的所有 .log 结尾的文件
+find /User -name "*.log" -print
+
+# 删除目录下一个月以前的日志文件， {} 不能少
+find /home/midou/logs// -mtime +30 -name "*.log.gz" -exec rm -rf {} \;
+```
