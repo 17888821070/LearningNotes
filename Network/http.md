@@ -52,7 +52,7 @@ http://www.aspxfans.com:8080/news/index.asp?boardID=5&ID=24618&page=1#name
 
 - Host：指定服务器的域名
 
-- Content-Length：本次数据长度
+- Content-Length：本次请求体长度
 
 - Connection：客户端要求服务器使用 TCP 持久连接，以便其他请求复用；HTTP/1.1 默认持久连接
 

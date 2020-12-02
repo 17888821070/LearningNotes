@@ -197,6 +197,27 @@ int close(int fd);
 
 close 操作只是使相应 socket 描述字的引用计数 -1，只有当引用计数为 0 的时候，才会触发 TCP 客户端向服务器发送终止连接请求
 
+### shutdown()
+
+```cpp
+int shutdown(int sockfd, int how);
+
+/*
+how 取值：
+
+SHUT_RD(0)：关闭 sockfd 上的读功能，此选项将不允许 sockfd 进行读操作；该套接字不再接受数据，任何当前在套接字接受缓冲区的数据将被丢弃
+
+SHUT_WR(1)：关闭 sockfd 的写功能，此选项将不允许 sockfd 进行写操作，即进程不能在对此套接字发出写操作
+
+SHUT_RDWR(2)：关闭 sockfd 的读写功能，相当于调用 shutdown 两次，首先 SHUT_RD 然后 SHUT_WR
+
+成功则返回 0，错误返回 -1
+错误码 errno：EBADF 表示 sockfd 不是一个有效描述符；ENOTCONN 表示 sockfd 未连接
+*/
+```
+
+`shutdown()` 的效果是累计的，不可逆转的。既如果关闭了一个方向数据传输，那么这个方向将会被关闭直至完全被关闭或删除，而不能重新被打开
+
 ### read()、write()
 
 - read() / write()
@@ -422,12 +443,66 @@ int flag = fcntl(socket_fd, F_GETFL, 0);
 fcntl(socket_fd, F_SETFL, flag & ~O_NONBLOCK);
 ```
 
-## 异常处理
+## socket 异常
 
-### 客户端进程奔溃
+一般出错的地方是调用 `connect()`、`recv()`、`send()`
 
-1. client 连接到 server 之后，client 进程意外奔溃，这时它会发送一个 FIN 给 server
+[![DoQcLQ.png](https://s3.ax1x.com/2020/12/02/DoQcLQ.png)](https://imgchr.com/i/DoQcLQ)
 
-2. 此时 server 并不知道 client 已经奔溃了，所以它会发送第一条消息给 client，但 client 已经退出了，所以 client 的 TCP 协议栈会发送一个 RST 给 server
+### 客户端连接服务器未监听端口
 
-3. server 在接收到 RST 之后，往一个已经收到 RST 的 socket 继续写入数据，将导致 SIGPIPE 信号，从而杀死 server
+服务端会对收到的 SYN 回应一个 RST，客户端收到 RST 之后，终止连接并进入 CLOSED 状态，返回 ECONNREFUSED 111
+
+### 服务器不可达
+
+服务端地址不可访问，返回 EHOSTUNREACH 113
+
+### 超时连接
+
+客户端发送的 SYN 丢失在网络中，没有得到确认，客户端的 TCP 会超时重发 SYN，发送 7 个 SYN 后等待一个超时时间，仍然没有收到 ACK，则 `connect()` 返回超时
+
+### 服务器端 SYN-ACK 丢失
+
+客户端没有收到 SYN-ACK 包，类似于超时连接错误
+
+服务器端由 LISTEN 进入 SYN_RECV，服务端的 TCP 会重发 SYN-ACK，直到超时，即 SYN 攻击
+
+### 客户端 ACK 丢失
+
+服务器端没有收到 ACK 包，类似于 SYN 攻击
+
+对于客户端来讲，由 SYN_SENT 状态进入了 ESTABLISED 状态，即连接成功，客户端可以发送数据，但实际上数据是发送不到服务端；客户端发送出去的数据得不到确认，最终，客户端产生一个复位信号并终止连接
+
+### 网络断开且互相不发送数据
+
+双方都不知道网络已经不通，会一直保持 ESTABLISHDED 状态，需要引入心跳机制
+
+### 网络断开但仍需发送数据
+
+接收一方不知道网络出问题，会一直等待数据到来
+
+对于发送方，发送方一直在发送数据，直到缓冲区满
+
+需要引入心跳机制
+
+### 网络断开后重启
+
+当重传的 TCP 分组到达重启后的系统，由于系统中没有该 TCP 分组对应的连接数据，系统会返回一个 RST，TCP 程序通过 `read()` 或 `write()` 调用可以分别对 RST 进行错误处理
+
+`read()` 会立即返回一个错误，错误信息为连接重置
+
+`write()` 会立即失败，应用程序会被返回一个 SIGPIPE 信号
+
+### 对端进程奔溃但仍接受数据
+
+linux 下，按 ctrl+c 结束程序，会调用 `close()`，发送 FIN
+
+接收方调用 `recv()` 返回 0
+
+### 对端进程奔溃但仍发送数据
+
+对端奔溃后内核会做一些清理的事情，为这个套接字发送一个 FIN 包；根据 TCP 协议，收到对方的 FIN 包只意味着对方不会再发送任何消息， 在一个双方正常关闭的流程中，收到 FIN 包的一端将剩余数据发送给对面（通过一次或多次 write），然后关闭套接字；当数据到达服务器端时，内核发现这是一个指向关闭的套接字，会再次向客户端发送一个 RST 包，对于发送端而言如果此时再执行 write 操作，立即会返回一个 RST 错误信息
+
+第一次调用 `send()` 返回成功，数据会被发送到奔溃的对端，奔溃端会用一个 RST
+
+再次调用 `send()` 返回 -1，errno 设置为 32 Broken pipe，会向应用程序发送 SIGPIPE 信号
