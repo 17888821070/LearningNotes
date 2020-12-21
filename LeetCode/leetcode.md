@@ -628,3 +628,10 @@ dp[mask][i] = any(
 [题目](https://leetcode.com/problems/distribute-repeating-integers/)
 
 [分析](https://www.bilibili.com/video/BV1qt4y1a7Lm)
+
+
+## LC 1696 跳跃游戏
+
+DP + 单调队列
+
+[题目](https://leetcode.com/problems/jump-game-vi/)
