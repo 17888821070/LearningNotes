@@ -308,6 +308,14 @@ dp[i][j] : maxCoins(nums[i] ~ nums[j])
 
 [分析](https://www.youtube.com/watch?v=z3hu2Be92UA&t=700s)
 
+## LC 329 最长递增路径
+
+DFS + DP
+
+[题目](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/)
+
+[分析](https://www.bilibili.com/video/BV1mW411d7q8?from=search&seid=5099018830887943293)
+
 
 ## LC 337 树状结构的房屋抢劫
 
@@ -592,6 +600,22 @@ DP + 滑动窗口 + BST + 单调队列
 
 [分析](https://www.youtube.com/watch?v=p8-f0_CwWLk&t=687s)
 
+## LC 1441 涂装方式
+
+DP
+
+```cpp
+/*
+利用行的状态做 DP
+一行格子涂装总共有 27 中方式
+dp[i][p] 表示第 i 行用 p 这种方式涂装的次数
+dp[i + 1][q] = sum(dp[i][p]) 其中 q 与 p 不冲突
+*/
+```
+
+[题目](https://leetcode.com/problems/number-of-ways-to-paint-n-3-grid/)
+
+[分析](https://www.youtube.com/watch?v=LwD9UIDIvHE)
 
 ## LC 1449 组合最大数
 
