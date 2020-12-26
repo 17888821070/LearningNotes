@@ -535,7 +535,6 @@ dp[i][j] = min(dp[k][j - 1] + cast(k, i - 1)) j - 2 < k < i - 2
 [分析](https://www.youtube.com/watch?v=kD6ShM6jr3g)
 
 
-
 ## LC 1335 工作安排
 
 DP
@@ -552,6 +551,27 @@ dp[i][j] = min(dp[k][j - 1] + max(jd[k ~ i - 1]))
 
 [分析](https://www.youtube.com/watch?v=eRBpfoWujQM&t=223s)
 
+## LC 1349 分配考场座位
+
+DP + 位运算
+
+```cpp
+/*
+利用行状态做 DP
+dp[i][s]：第 i 行状态为 s 时的最多人数
+dp[i + 1][s] = max(dp[i][t] + row(i + 1, t))
+
+取一个数的二进制子集
+generate a subset of v
+x = v
+while x:
+    x = (x - 1) & v
+*/
+```
+
+[题目](https://leetcode.com/problems/maximum-students-taking-exam/)
+
+[分析](https://www.youtube.com/watch?v=QJvCYx1eGxE)
 
 ## LC 1416 重新划分字符串
 

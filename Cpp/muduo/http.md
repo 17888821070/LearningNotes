@@ -2,6 +2,8 @@
 
 ## HttpRequest
 
+Http 请求头
+
 ```cpp
 class HttpRequest : public muduo::copyable {
 public:
@@ -21,6 +23,10 @@ private:
     std::map<string, string> headers_;
 
 public:
+    HttpRequest() : method_(kInvalid), version_(kUnknown) {
+
+    }
+
     bool setMethod(const char* start, const char* end) {
         assert(method_ == kInvalid);
         string m(start, end);
@@ -77,6 +83,8 @@ public:
         return result;
     }
 
+    // colon 指向第一个空格
+    // isspace() 是库函数，判断是否为空格、\t、\r、\n、\v、\f
     void addHeader(const char* start, const char* colon, const char* end) {
         string field(start, colon);
         ++colon;
@@ -89,9 +97,8 @@ public:
         }
         headers_[field] = value;
     }
-
-
 }
+
 ```
 
 ## HttpContext
@@ -112,21 +119,6 @@ public:
 
     // return false if any error
     bool parseRequest(Buffer* buf, Timestamp receiveTime);
-
-    bool gotAll() const
-    { return state_ == kGotAll; }
-
-    void reset() {
-        state_ = kExpectRequestLine;
-        HttpRequest dummy;
-        request_.swap(dummy);
-    }
-
-    const HttpRequest& request() const
-    { return request_; }
-
-    HttpRequest& request()
-    { return request_; }
 
 private:
     bool processRequestLine(const char* begin, const char* end);
@@ -169,8 +161,7 @@ bool HttpContext::processRequestLine(const char* begin, const char* end) {
     return succeed;
 }
 
-bool HttpContext::parseRequest(Buffer* buf, Timestamp receiveTime)
-{
+bool HttpContext::parseRequest(Buffer* buf, Timestamp receiveTime) {
     bool ok = true;
     bool hasMore = true;
     while (hasMore) {
