@@ -66,7 +66,7 @@ char b = ToChar(123);  // '3'
 `\` 行继续操作，表示下一行继续此宏的定义，最后一行不要加续行符
 
 ```cpp
-#define MACRO(arg1, arg2) do { \
+#define MACRO(arg1,arg2) do { \
     stmt1; \
     stmt2; \
 } while(0) /* (no trailing ; ) */
