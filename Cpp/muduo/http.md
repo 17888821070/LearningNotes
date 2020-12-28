@@ -2,7 +2,7 @@
 
 ## HttpRequest
 
-Http 请求头
+请求头
 
 ```cpp
 class HttpRequest : public muduo::copyable {
@@ -103,6 +103,8 @@ public:
 
 ## HttpContext
 
+请求报文
+
 ```cpp
 class HttpContext : public muduo::copyable {
 public:
@@ -128,11 +130,12 @@ private:
 }
 
 bool HttpContext::processRequestLine(const char* begin, const char* end) {
+    // 在 [begin, end) 区间内查找
     bool succeed = false;
     const char* start = begin;
     const char* space = std::find(start, end, ' ');
     if (space != end && request_.setMethod(start, space)) {
-        start = space+1;
+        start = space + 1;
         space = std::find(start, end, ' ');
         if (space != end) {
             const char* question = std::find(start, space, '?');
@@ -166,6 +169,7 @@ bool HttpContext::parseRequest(Buffer* buf, Timestamp receiveTime) {
     bool hasMore = true;
     while (hasMore) {
         if (state_ == kExpectRequestLine) {
+            // 解析请求行
             const char* crlf = buf->findCRLF();
             if (crlf) {
                 ok = processRequestLine(buf->peek(), crlf);
@@ -183,6 +187,7 @@ bool HttpContext::parseRequest(Buffer* buf, Timestamp receiveTime) {
             }
         }
         else if (state_ == kExpectHeaders) {
+            // 解析请求头
             const char* crlf = buf->findCRLF();
             if (crlf) {
                 const char* colon = std::find(buf->peek(), crlf, ':');
@@ -190,8 +195,7 @@ bool HttpContext::parseRequest(Buffer* buf, Timestamp receiveTime) {
                     request_.addHeader(buf->peek(), colon, crlf);
                 }
                 else {
-                // empty line, end of header
-                // FIXME:
+                    // empty line, end of header
                     state_ = kGotAll;
                     hasMore = false;
                 }
@@ -202,9 +206,67 @@ bool HttpContext::parseRequest(Buffer* buf, Timestamp receiveTime) {
             }
         }
         else if (state_ == kExpectBody) {
-            // FIXME:
+            // 解析请求体
         }
     }
     return ok;
+}
+```
+
+## HttpRespose
+
+响应报文
+
+```cpp
+class HttpResponse : public muduo::copyable {
+private:
+    std::map<string, string> headers_;
+    HttpStatusCode statusCode_;
+    // FIXME: add http version
+    string statusMessage_;
+    bool closeConnection_;
+    string body_;
+
+public:
+    enum HttpStatusCode {
+        kUnknown,
+        k200Ok = 200,
+        k301MovedPermanently = 301,
+        k400BadRequest = 400,
+        k404NotFound = 404,
+  };
+
+    explicit HttpResponse(bool close)
+        : statusCode_(kUnknown)
+        , closeConnection_(close) {
+    }
+
+    void appendToBuffer(Buffer* output) const {
+        char buf[32];
+        // 格式化拼接字符串
+        snprintf(buf, sizeof buf, "HTTP/1.1 %d ", statusCode_);
+        output->append(buf);
+        output->append(statusMessage_);
+        output->append("\r\n");
+
+        if (closeConnection_) {
+            output->append("Connection: close\r\n");
+        }
+        else {
+            snprintf(buf, sizeof buf, "Content-Length: %zd\r\n", body_.size());
+            output->append(buf);
+            output->append("Connection: Keep-Alive\r\n");
+        }
+
+        for (const auto& header : headers_) {
+            output->append(header.first);
+            output->append(": ");
+            output->append(header.second);
+            output->append("\r\n");
+        }
+
+        output->append("\r\n");
+        output->append(body_);
+    }
 }
 ```
