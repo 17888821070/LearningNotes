@@ -645,6 +645,26 @@ DP
 
 [分析](https://www.youtube.com/watch?v=J43N1o1XhqE)
 
+## LC 1589 区间次数统计
+
+区间统计
+
+```cpp
+/*
+使用差分数组统计区间次数，利用差分数组统计频率变化导数
+
+diff[i] 表示第 i 个元素的查询频次与第 i - 1 个元素查询频次差值
+
+对于 [start, end]，diff[start] += 1，diff[end + 1] -= 1;
+
+对于元素频率 f[i] = f[i - 1] + diff[i]
+*/
+```
+
+[题目](https://leetcode.com/problems/maximum-sum-obtained-of-any-permutation/)
+
+[分析](https://www.youtube.com/watch?v=9BJkTC3iTGs)
+
 
 ## LC 1643 可达最远楼梯
 
@@ -654,6 +674,17 @@ DP
 
 [分析](https://www.youtube.com/watch?v=FowBaF5hYcY)
 
+## LC 1653 字符串平衡
+
+DP
+
+```cpp
+/*
+dp[i][j]: 0 ~ i 的子字符串平衡的最少操作，j == 0 表示以 a 结尾，j == 1 表示以 b 结尾
+*/
+```
+
+[题目](https://leetcode.com/problems/minimum-deletions-to-make-string-balanced/)
 
 ## LC 1665 分配问题
 

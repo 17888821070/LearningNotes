@@ -271,7 +271,7 @@ pop()|弹出顶部元素|
 -|-|-
 template<class T,class Container = std::vector<T>,class Compare = std::less<typename Container::value_type>> class priority_queue|构造函数|
 size()|容器现有元素数量|
-top()|返回队列顶部元素的引用|
+top()|返回队列顶部元素的常量引用|
 push(T val)|插入新元素|
 emplace(T val)|插入新元素|
 pop()|弹出顶部元素|
