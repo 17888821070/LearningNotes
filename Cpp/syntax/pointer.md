@@ -100,3 +100,115 @@ int main()
     return 0;
 }
 ```
+
+## 函数指针
+
+```cpp
+char glFun(int a) {
+    return a;
+}
+
+// 形式 1：返回类型(*函数名)(参数表) 
+int main() {
+    char (*pFun)(int);  // 定义了一个变量 pFun
+    pFun = glFun;
+    pFun(1);
+    (*pFun)(2);
+    return 0;
+}
+
+// 形式 2：使用 typedef
+typedef char (*fun_t_p)(int);
+typedef char (&fun_t_r)(int);
+typedef char fun_t_t(int);
+
+int main() {
+    fun_t_p f_t_p = glFun;
+    f_t_p(1);
+    (*f_t_p)(2);
+
+    fun_t_r f_t_r = glFun;
+    f_t_r(1);
+    (*f_t_r)(2);
+
+    fun_t_t* f_t_t = glFun;
+    f_t_t(1);
+    (*f_t_t)(2);
+    return 0;
+}
+
+// 形式 3：使用 using
+using fun_u_p = char(*)(int);
+using fun_u_r = char(&)(int);
+using fun_u_t = char(int);
+
+int main() {
+    fun_u_p f_u_p = glFun;
+    f_u_p(1);
+    (*f_u_p)(2);
+
+    fun_u_r f_u_r = glFun;
+    f_u_r(1);
+    (*f_u_r)(2);
+
+    fun_u_t* f_u_t = glFun;
+    f_u_t(1);
+    (*f_u_t)(2);
+    return 0;
+}
+
+// 类成员函数
+
+// 静态方法函数指针语法
+void (*ptrStaticFun)() = &ClassName::staticFun;
+// 成员方法函数指针语法
+void (ClassName::*ptrNonStaticFun)() = &ClassName::nonStaticFun;
+
+class MyClass {
+public:
+	static int FunA(int a, int b) {
+		cout << "call FunA" << endl;
+		return a + b;
+	}
+
+	void FunB() {
+		cout << "call FunB" << endl;
+	}
+
+	void FunC() {
+		cout << "call FunC" << endl;
+	}
+
+	int pFun1(int(*p)(int, int), int a, int b) {
+		return (*p)(a, b);
+	}
+
+	void pFun2(void (MyClass::* nonstatic)()) {
+		(this->*nonstatic)();
+	}
+};
+
+typedef void(MyClass::* f_t)();
+using f_u = void(MyClass::*)();
+
+int main() {
+	MyClass* obj = new MyClass;
+	// 静态函数指针的使用
+	int(*pFunA)(int, int) = &MyClass::FunA;
+	cout << pFunA(1, 2) << endl;
+
+	// 成员函数指针的使用
+	void (MyClass::*pFunB)() = &MyClass::FunB;
+	(obj->*pFunB)();
+
+	// 通过 pFun1 只能调用静态方法
+	obj->pFun1(&MyClass::FunA, 1, 2);
+
+	// 通过 pFun2 就是调用成员方法
+	obj->pFun2(&MyClass::FunB);
+	obj->pFun2(&MyClass::FunC);
+
+	delete obj;
+	return 0;
+}
+```
