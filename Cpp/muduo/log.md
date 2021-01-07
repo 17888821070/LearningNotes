@@ -333,4 +333,19 @@ public:
     Logger(SourceFile file, int line, LogLevel level, const char* func);
     Logger(SourceFile file, int line, bool toAbort);
 }
+
+
+
+
+#define LOG_TRACE if (muduo::Logger::logLevel() <= muduo::Logger::TRACE) \
+    muduo::Logger(__FILE__, __LINE__, muduo::Logger::TRACE, __func__).stream()
+#define LOG_DEBUG if (muduo::Logger::logLevel() <= muduo::Logger::DEBUG) \
+    muduo::Logger(__FILE__, __LINE__, muduo::Logger::DEBUG, __func__).stream()
+#define LOG_INFO if (muduo::Logger::logLevel() <= muduo::Logger::INFO) \
+    muduo::Logger(__FILE__, __LINE__).stream()
+#define LOG_WARN muduo::Logger(__FILE__, __LINE__, muduo::Logger::WARN).stream()
+#define LOG_ERROR muduo::Logger(__FILE__, __LINE__, muduo::Logger::ERROR).stream()
+#define LOG_FATAL muduo::Logger(__FILE__, __LINE__, muduo::Logger::FATAL).stream()
+#define LOG_SYSERR muduo::Logger(__FILE__, __LINE__, false).stream()
+#define LOG_SYSFATAL muduo::Logger(__FILE__, __LINE__, true).stream()
 ```

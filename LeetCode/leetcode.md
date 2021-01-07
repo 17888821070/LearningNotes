@@ -294,6 +294,25 @@ BST + 单调队列
 
 [题目](https://leetcode.com/problems/find-the-duplicate-number/)
 
+## LC 300 最长递增子序列
+
+DP
+
+```
+/*
+方法一：
+dp[i]：下标为 i 元素的最长递增子序列
+
+方法二：
+dp[i]：长度为 i 的最长递增子序列最大元素
+更新 dp 数组时将子序列最大元素最小化
+*/ 
+```
+
+[题目](https://leetcode.com/problems/longest-increasing-subsequence/)
+
+[分析](https://www.bilibili.com/video/BV1Wf4y1y7ou)
+
 ## LC 312 打气球
 
 DP
