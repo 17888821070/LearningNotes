@@ -3,6 +3,8 @@
 ## sort
 
 ```cpp
+sort 默认使用类或结构体的 < 进行比较，< 返回 true时不交换位置
+
 auto comp = [](int a, int b) {
     return a < b;
 };
