@@ -100,7 +100,7 @@ void FixedBuffer<SIZE>::cookieEnd() {}
 
 ## LogStream
 
-将内容写入 FixedBuffer 中
+提供了一些写入日志的方法
 
 ```cpp
 class LogStream {
@@ -218,13 +218,31 @@ public:
     void append(const char* data, int len) { buffer_.append(data, len); }
 
 private:
-    void staticCheck();
+    void staticCheck() {
+        /* numeric_limits<class T> 
+        提供了一些获取数学类型数据信息的静态方法，eg：
+        std::numeric_limits<T>::is_signed 
+        std::numeric_limits<T>::is_integer
+        std::numeric_limits<T>::digits
+        std::numeric_limits<T>::digits10
+        std::numeric_limits<T>::min
+        */
+        static_assert(kMaxNumericSize - 10 > std::numeric_limits<double>::digits10,
+                "kMaxNumericSize is large enough");
+        static_assert(kMaxNumericSize - 10 > std::numeric_limits<long double>::digits10,
+                "kMaxNumericSize is large enough");
+        static_assert(kMaxNumericSize - 10 > std::numeric_limits<long>::digits10,
+                "kMaxNumericSize is large enough");
+        static_assert(kMaxNumericSize - 10 > std::numeric_limits<long long>::digits10,
+                "kMaxNumericSize is large enough");
+    }
 
     template<typename T>
     void formatInteger(T);
 
     Buffer buffer_;
 
+    // 当 buffer 中剩余空间不小于 kMaxNumericSize 时才允许写入
     static const int kMaxNumericSize = 32;
 }
 
@@ -275,15 +293,45 @@ inline LogStream& operator<<(LogStream& s, const Fmt& fmt) {
 一次 log 事件
 
 ```cpp
+// .h 文件声明一个全局变量
+extern Logger::LogLevel g_logLovel;
+// .cpp 文件定义
+Logger::LogLevel initLogLevel() {
+    if (::getenv("MUDUO_LOG_TRACE"))
+        return Logger::TRACE;
+    else if (::getenv("MUDUO_LOG_DEBUG"))
+        return Logger::DEBUG;
+    else
+        return Logger::INFO;
+}
+// g_logLevel 只会取 0 1 2
+Logger::LogLevel g_logLevel = initLogLevel();
+
+
 class Logger {
 private:
 
     class Impl {
     public:
         typedef Logger::LogLevel LogLevel;
-        Impl(LogLevel level, int old_errno, const SourceFile& file, int line);
+        Impl(LogLevel level, int old_errno, 
+            const SourceFile& file, int line)
+                : time_(Timestamp::now())
+                , stream_()
+                , level_(level)
+                , basename_(file) {
+            formatTime();
+            CurrentThread::tid();
+            stream_ << T(CurrentThread::tidString(), CurrentThread::tidStringLength());
+            stream_ << T(LogLevelName[level], 6);
+            if (savedErrno != 0) {
+                stream_ << strerror_tl(savedErrno) << " (errno=" << savedErrno << ") ";
+            }
+        }
         void formatTime();
-        void finish();
+        void finish() {
+            stream_ << " - " << basename_ << ':' << line_ << '\n';
+        }
 
         Timestamp time_;
         LogStream stream_;
@@ -332,20 +380,71 @@ public:
     Logger(SourceFile file, int line, LogLevel level);
     Logger(SourceFile file, int line, LogLevel level, const char* func);
     Logger(SourceFile file, int line, bool toAbort);
+
+    LogStream& stream() { return impl_.stream_; }
+
+    static LogLevel logLevel() {
+        return g_logLevel;
+    }
+    static void setLogLevel(LogLevel level) {
+        g_logLevel = level;
+    }
+
+    typedef void (*OutputFunc)(const char* msg, int len);
+    typedef void (*FlushFunc)();
+    static void setOutput(OutputFunc out) {
+        g_output = out;
+    }
+    static void setFlush(FlushFunc flush) {
+        g_flush = flush;
+    }
+
+    ~Logger() {
+        impl_.finish();
+        const LogStream::Buffer& buf(stream().buffer());
+        g_output(buf.data(), buf.length());
+        if (impl_.level_ == FATAL) {
+            g_flush();
+            abort();
+        }
+    }
 }
 
+// 由 g_output 来定义日志的输出地
+void defaultOutput(const char* msg, int len) {
+    size_t n = fwrite(msg, 1, len, stdout);
+    //FIXME check n
+    (void)n;
+}
 
+void defaultFlush() {
+    fflush(stdout);
+}
 
+Logger::OutputFunc g_output = defaultOutput;
+Logger::FlushFunc g_flush = defaultFlush;
 
+// 当定义的全局日志级别小于等于指定日志级别时才打印
+// __FILE__、__LINE__、__func__ 是编译器内置宏
+// __FILE__ 当前文件名
+// __LINE__ 当前行号
+// __func__ 当前函数名
 #define LOG_TRACE if (muduo::Logger::logLevel() <= muduo::Logger::TRACE) \
     muduo::Logger(__FILE__, __LINE__, muduo::Logger::TRACE, __func__).stream()
+
 #define LOG_DEBUG if (muduo::Logger::logLevel() <= muduo::Logger::DEBUG) \
     muduo::Logger(__FILE__, __LINE__, muduo::Logger::DEBUG, __func__).stream()
+
 #define LOG_INFO if (muduo::Logger::logLevel() <= muduo::Logger::INFO) \
     muduo::Logger(__FILE__, __LINE__).stream()
+
 #define LOG_WARN muduo::Logger(__FILE__, __LINE__, muduo::Logger::WARN).stream()
+
 #define LOG_ERROR muduo::Logger(__FILE__, __LINE__, muduo::Logger::ERROR).stream()
+
 #define LOG_FATAL muduo::Logger(__FILE__, __LINE__, muduo::Logger::FATAL).stream()
+
 #define LOG_SYSERR muduo::Logger(__FILE__, __LINE__, false).stream()
+
 #define LOG_SYSFATAL muduo::Logger(__FILE__, __LINE__, true).stream()
 ```
