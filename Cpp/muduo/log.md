@@ -671,8 +671,7 @@ void AsyncLogging::append(const char* logline, int len) {
     }
 }
 
-void AsyncLogging::threadFunc()
-{
+void AsyncLogging::threadFunc() {
     assert(running_ == true);
     latch_.countDown();
     LogFile output(basename_, rollSize_, false);

@@ -758,15 +758,15 @@ void wait (unique_lock<mutex>& lck, Predicate pred);
 std::mutex mutex;
 std::condition_variable cv;
 
-// 条件变量与临界区有关，用来获取和释放一个锁，因此通常会和mutex联用
+// 条件变量与临界区有关，用来获取和释放一个锁，因此通常会和 mutex 联用
 std::unique_lock lock(mutex);  // 获得锁
 
 // 当前线程调用 wait() 后将被阻塞
 cv.wait(lock);  // 调用该函数前，当前线程应该已经对unique_lock<mutex> lck完成了加锁
-// 线程阻塞时，会释放lock，然后在cv上等待，直到其它线程通过cv.notify_xxx来唤醒当前线程
+// 线程阻塞时，会释放 lock，然后在 cv 上等待，直到其它线程通过 cv.notify_xxx来唤醒当前线程
 // 释放锁后使得其他被阻塞在锁竞争上的线程得以继续执行
-// cv被唤醒后会再次对lock进行上锁，然后wait函数才会返回
-// wait返回后可以安全的使用mutex保护的临界区内的数据，此时mutex仍为上锁状态
+// cv 被唤醒后会再次对 lock 进行上锁，然后 wait 函数才会返回
+// wait 返回后可以安全的使用 mutex 保护的临界区内的数据，此时 mutex 仍为上锁状态
 ```
 
 - `notify` 唤醒 `wait` 在该条件变量上的线程，有 `notify_one` 唤醒一个等待的线程（多个线程阻塞时唤醒某个不确定的线程）和 `notify_all` 唤醒所有等待的线程
