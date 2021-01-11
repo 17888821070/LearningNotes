@@ -2,6 +2,8 @@
 
 ## StringArg
 
+封装 C 风格字符串
+
 ```cpp
 class StringArg {
 private:

@@ -330,3 +330,12 @@ find /User -name "*.log" -print
 # 删除目录下一个月以前的日志文件， {} 不能少
 find /home/midou/logs// -mtime +30 -name "*.log.gz" -exec rm -rf {} \;
 ```
+
+## ulimit
+
+shell 执行程序的资源限制
+
+```
+ulimit -a: 查看所有限制
+ulimit -u 500: 设置当前 shell 用户程序上限
+```

@@ -401,7 +401,7 @@ thread& operator=(thread&& _Other) noexcept
 
 ### 让出时间片
 
-`std::this_thread::yield()` 将当前线程所抢到的 CPU 时间片让给其他线程，等到其他线程使用完时间片后, 再由操作系统调度, 当前线程再和其他线程一起开始抢 CPU 时间片
+`std::this_thread::yield()` 将当前线程所抢到的 CPU 时间片让给其他线程，等到其他线程使用完时间片后，再由操作系统调度，当前线程再和其他线程一起开始抢 CPU 时间片
 
 
 ## 互斥量

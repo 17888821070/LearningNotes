@@ -310,7 +310,6 @@ Logger::LogLevel g_logLevel = initLogLevel();
 
 class Logger {
 private:
-
     class Impl {
     public:
         typedef Logger::LogLevel LogLevel;
@@ -447,4 +446,298 @@ Logger::FlushFunc g_flush = defaultFlush;
 #define LOG_SYSERR muduo::Logger(__FILE__, __LINE__, false).stream()
 
 #define LOG_SYSFATAL muduo::Logger(__FILE__, __LINE__, true).stream()
+```
+
+## LogFile
+
+输出日志文件
+
+```cpp
+class LogFile : noncopyable {
+private：
+    const string basename_;
+    const off_t rollSize_;  // 单个日志文件最大值
+    const int flushInterval_;
+    
+    // 当写入多条日志后进行检查是否需要使用新的日志文件
+    const int checkEveryN_; 
+
+    // 当前日志文件已写入日志量
+    int count_;
+
+    std::unique_ptr<MutexLock> mutex_;
+    
+    // 更新日志文件相关参数
+    time_t startOfPeriod_;
+    time_t lastRoll_;
+    time_t lastFlush_;
+
+    std::unique_ptr<FileUtil::AppendFile> file_;
+
+    const static int kRollPerSeconds_ = 60*60*24;
+
+public:
+    LogFile(const string& basename,
+            off_t rollSize,
+            bool threadSafe = true,
+            int flushInterval = 3,
+            int checkEveryN = 1024)
+        : basename_(basename),
+          rollSize_(rollSize),
+          flushInterval_(flushInterval),
+          checkEveryN_(checkEveryN),
+          count_(0),
+          mutex_(threadSafe ? new MutexLock : NULL),
+          startOfPeriod_(0),
+          lastRoll_(0),
+          lastFlush_(0) {
+        assert(basename.find('/') == string::npos);
+        rollFile();
+    }
+
+    ~LogFile() = default;
+
+    void append(const char* logline, int len) {
+        if (mutex_) {
+            MutexLockGuard lock(*mutex_);
+            append_unlocked(logline, len);
+        }
+        else {
+            append_unlocked(logline, len);
+        }
+    }
+
+    void flush() {
+        if (mutex_) {
+            MutexLockGuard lock(*mutex_);
+            file_->flush();
+        }
+        else {
+            file_->flush();
+        }
+    }
+
+    // 创建日志文件
+    bool rollFile() {
+        time_t now = 0;
+        string filename = getLogFileName(basename_, &now);
+        time_t start = now / kRollPerSeconds_ * kRollPerSeconds_;
+
+        if (now > lastRoll_) {
+            lastRoll_ = now;
+            lastFlush_ = now;
+            startOfPeriod_ = start;
+            file_.reset(new FileUtil::AppendFile(filename));
+            return true;
+        }
+        return false;
+    }
+
+ private:
+    void append_unlocked(const char* logline, int len) {
+        file_->append(logline, len);
+        if (file_->writtenBytes() > rollSize_) {
+            // 当一个日志文件写入足够多的信息后
+            // 将重新新建日志文件，保证不全写在一个日志文件
+            rollFile();
+        }
+        else {
+            ++count_;
+            if (count_ >= checkEveryN_) {
+                count_ = 0;
+                time_t now = ::time(NULL);
+                time_t thisPeriod_ = now / kRollPerSeconds_ * kRollPerSeconds_;
+                if (thisPeriod_ != startOfPeriod_) {
+                    rollFile();
+                }
+                else if (now - lastFlush_ > flushInterval_)
+                {
+                    lastFlush_ = now;
+                    file_->flush();
+                }
+            }
+        }
+    }
+
+    static string getLogFileName(const string& basename, 
+                    time_t* now) {
+        string filename;
+        filename.reserve(basename.size() + 64);
+        filename = basename;
+
+        char timebuf[32];
+        struct tm tm;
+        *now = time(NULL);
+        gmtime_r(now, &tm); // FIXME: localtime_r ?
+        strftime(timebuf, sizeof timebuf, ".%Y%m%d-%H%M%S.", &tm);
+        filename += timebuf;
+
+        filename += ProcessInfo::hostname();
+
+        char pidbuf[32];
+        snprintf(pidbuf, sizeof pidbuf, 
+                ".%d", ProcessInfo::pid());
+        filename += pidbuf;
+
+        filename += ".log";
+
+        return filename;
+    }
+
+}
+```
+
+## AsyncLogging
+
+```cpp
+class AsyncLogging : noncopyable {
+private:
+    typedef muduo::detail::FixedBuffer<muduo::detail::kLargeBuffer> Buffer;
+    typedef std::vector<std::unique_ptr<Buffer>> BufferVector;
+    typedef BufferVector::value_type BufferPtr;
+
+    void threadFunc();
+
+    const int flushInterval_;
+    std::atomic<bool> running_;
+    const string basename_;
+    const off_t rollSize_;
+    muduo::Thread thread_;
+    muduo::CountDownLatch latch_;
+    muduo::MutexLock mutex_;
+    muduo::Condition cond_ GUARDED_BY(mutex_);
+    BufferPtr currentBuffer_ GUARDED_BY(mutex_);
+    BufferPtr nextBuffer_ GUARDED_BY(mutex_);
+    BufferVector buffers_ GUARDED_BY(mutex_);
+
+public:
+    AsyncLogging(const string& basename,
+            off_t rollSize,
+            int flushInterval = 3) 
+            : flushInterval_(flushInterval)
+            , running_(false)
+            , basename_(basename)
+            , rollSize_(rollSize)
+            , thread_(std::bind(&AsyncLogging::threadFunc, this), "Logging")
+            , latch_(1)
+            , mutex_()
+            , cond_(mutex_)
+            , currentBuffer_(new Buffer)
+            , nextBuffer_(new Buffer)
+            , buffers_() {
+        currentBuffer_->bzero();
+        nextBuffer_->bzero();
+        buffers_.reserve(16);
+    }
+
+    ~AsyncLogging() {
+        if (running_) {
+            stop();
+        }
+    }
+
+    void append(const char* logline, int len);
+
+    void start() {
+        running_ = true;
+        thread_.start();
+        latch_.wait();
+    }
+
+    void stop() NO_THREAD_SAFETY_ANALYSIS {
+        running_ = false;
+        cond_.notify();
+        thread_.join();
+    }
+}
+
+void AsyncLogging::append(const char* logline, int len) {
+    muduo::MutexLockGuard lock(mutex_);
+    if (currentBuffer_->avail() > len) {
+        currentBuffer_->append(logline, len);
+    }
+    else {
+        // 移动拷贝
+        buffers_.push_back(std::move(currentBuffer_));
+
+        if (nextBuffer_) {
+            currentBuffer_ = std::move(nextBuffer_);
+        }
+        else {
+            currentBuffer_.reset(new Buffer); // Rarely happens
+        }
+        currentBuffer_->append(logline, len);
+        cond_.notify();
+    }
+}
+
+void AsyncLogging::threadFunc()
+{
+    assert(running_ == true);
+    latch_.countDown();
+    LogFile output(basename_, rollSize_, false);
+    BufferPtr newBuffer1(new Buffer);
+    BufferPtr newBuffer2(new Buffer);
+    newBuffer1->bzero();
+    newBuffer2->bzero();
+    BufferVector buffersToWrite;
+    buffersToWrite.reserve(16);
+    while (running_) {
+        assert(newBuffer1 && newBuffer1->length() == 0);
+        assert(newBuffer2 && newBuffer2->length() == 0);
+        assert(buffersToWrite.empty());
+
+        // 缩短加锁代码段
+        {
+            muduo::MutexLockGuard lock(mutex_);
+            if (buffers_.empty()) {
+                cond_.waitForSeconds(flushInterval_);
+            }
+            buffers_.push_back(std::move(currentBuffer_));
+            currentBuffer_ = std::move(newBuffer1);
+            buffersToWrite.swap(buffers_);
+            if (!nextBuffer_) {
+                nextBuffer_ = std::move(newBuffer2);
+            }
+        }
+
+        assert(!buffersToWrite.empty());
+
+        if (buffersToWrite.size() > 25) {
+            char buf[256];
+            snprintf(buf, sizeof buf, "Dropped log messages at %s, %zd larger buffers\n",
+                    Timestamp::now().toFormattedString().c_str(),
+                    buffersToWrite.size()-2);
+            fputs(buf, stderr);
+            output.append(buf, static_cast<int>(strlen(buf)));
+            buffersToWrite.erase(buffersToWrite.begin()+2, buffersToWrite.end());
+        }
+
+        for (const auto& buffer : buffersToWrite) {
+            output.append(buffer->data(), buffer->length());
+        }
+
+        if (buffersToWrite.size() > 2) {
+            buffersToWrite.resize(2);
+        }
+
+        if (!newBuffer1) {
+            assert(!buffersToWrite.empty());
+            newBuffer1 = std::move(buffersToWrite.back());
+            buffersToWrite.pop_back();
+            newBuffer1->reset();
+        }
+
+        if (!newBuffer2) {
+            assert(!buffersToWrite.empty());
+            newBuffer2 = std::move(buffersToWrite.back());
+            buffersToWrite.pop_back();
+            newBuffer2->reset();
+        }
+
+        buffersToWrite.clear();
+        output.flush();
+    }
+    output.flush();
+}
 ```
