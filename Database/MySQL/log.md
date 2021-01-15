@@ -22,9 +22,7 @@ write pos 和 checkpoint 之间的部分是可以用来记录新的操作；如�
 
 redo log 的写入拆成了两个步骤：prepare 和 commit，这就是两阶段提交，是为了让 redo log 和 binlog 之间的逻辑一致
 
-由于 redo log 和 binlog 是两个独立的逻辑，如果不用两阶段提交，会出现一定问题：
-
-1. 先写 redo log 后写 binlog：假设在 redo log 写完，binlog 还没有写完的时候，MySQL 进程异常重启
+由于 redo log 和 binlog 是两个独立的逻辑，如果不用两阶段提交，会出现一定问题
 
 ## binlog
 
@@ -49,3 +47,19 @@ redo log 的写入拆成了两个步骤：prepare 和 commit，这就是两阶�
 5. 执行器生成这个操作的 binlog，并把 binlog 写入磁盘
 
 6. 执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成
+
+ MySQL 以 binlog 的写入与否作为事务是否成功的标记
+
+## 奔溃恢复规则
+
+redo log 和 binlog 有一个共同的数据字段，叫 XID
+
+崩溃恢复的时候，会按顺序扫描 redo log：
+
+1. 如果碰到既有 prepare、又有 commit 的 redo log，就直接提交
+
+2. 如果碰到只有 parepare、而没有 commit 的 redo log，就拿着 XID 去 binlog 找对应的事务；binlog 无记录，回滚事务；binlog 有记录，提交事务
+
+先写 redo log 后写 binlog：假设在 redo log 写完，binlog 还没有写完的时候，MySQL 进程异常重启；由于 bin log 日志没有修改记录，使用 redo log + bin log 恢复的数据就是数据库旧的数据
+
+先写 bin log 后写redo log：假设在 bin log 写完，redo log 还没有完成的时候，MySQL 进程异常重启；
