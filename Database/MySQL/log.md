@@ -10,7 +10,7 @@ redo log 是 InnoDB 引擎特有的日志，Server 层的日志称为 binlog
 
 InnoDB 引擎会在适当的时候，将这个操作记录更新到磁盘里面，而这个更新往往是在系统比较空闲的时候做
 
-InnoDB 的 redo log 是固定大小的，比如可以配置为一组 4 个文件，每个文件的大小是 1GB，那么这块“粉板”总共就可以记录 4GB 的操作，从头开始写，写到末尾就又回到开头循环写
+InnoDB 的 redo log 是固定大小的，比如可以配置为一组 4 个文件，每个文件的大小是 1GB，那么redo log 总共就可以记录 4GB 的操作，从头开始写，写到末尾就又回到开头循环写
 
 [![stScqI.png](https://s3.ax1x.com/2021/01/13/stScqI.png)](https://imgchr.com/i/stScqI)
 
