@@ -116,7 +116,7 @@ insert into t(id, k) values(1,1),(2,2);
 
 事务 B 查到的 k 的值是 3，而事务 A 查到的 k 的值是 1
 
-## 分析
+### 分析
 
 做如下假设：
 
@@ -148,7 +148,7 @@ insert into t(id, k) values(1,1),(2,2);
 
 如果把事务 A 的查询语句 select * from t where id=1 修改一下，加上 lock in share mode 或 for update，也都可以读到版本号是 101 的数据，返回的 k 的值是 3
 
-## 拓展
+### 拓展
 
 假设事务 C 不是马上提交的，而是变成了下面的事务 C'
 

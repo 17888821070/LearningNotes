@@ -62,4 +62,4 @@ redo log 和 binlog 有一个共同的数据字段，叫 XID
 
 先写 redo log 后写 binlog：假设在 redo log 写完，binlog 还没有写完的时候，MySQL 进程异常重启；由于 bin log 日志没有修改记录，使用 redo log + bin log 恢复的数据就是数据库旧的数据
 
-先写 bin log 后写redo log：假设在 bin log 写完，redo log 还没有完成的时候，MySQL 进程异常重启；
+先写 bin log 后写 redo log：假设在 bin log 写完，redo log 还没有完成的时候，MySQL 进程异常重启；
