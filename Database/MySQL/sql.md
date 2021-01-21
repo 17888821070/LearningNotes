@@ -548,6 +548,13 @@ column1
 
 可以在 MySQL 数据表中设置指定的字段为 PRIMARY KEY（主键） 或者 UNIQUE（唯一） 索引来保证数据的唯一性
 
+## 使用索引
+
+- USE INDEX()：希望 MySQL 使用该索引
+
+- IGNORE INDEX()：希望 MySQL 获取该索引
+
+- FORCE INDEX()：强制使用该索引
 
 ## 示例
 
