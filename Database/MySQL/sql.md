@@ -577,7 +577,7 @@ select * from employees where hire_date = (
 select * from employees order by hire_date desc limit 1;
 
 # 入职时间倒数第三的员工所有信息
-select * from employees order by hire_date desc limit 1;
+select * from employees order by hire_date desc limit 1 offset 2;
 ```
 
 ### 各个部门当前领导当前薪水和部门

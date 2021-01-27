@@ -242,6 +242,19 @@ tail [-n count | -c bytes] [file ...]
 
 流式读取，支持翻页
 
+## tail
+
+用于查看文件尾部内容
+
+```
+tail [opt] [file]
+
+opt:
+
+-f 循环刷新读取
+-n <行数> 显示文件的尾部 n 行内容
+```
+
 ## awk
 
 awk 把文件逐行的读入，以空格和制表符为默认分隔符将每行切片，切开的部分再进行各种分析处理
@@ -338,4 +351,18 @@ shell 执行程序的资源限制
 ```
 ulimit -a: 查看所有限制
 ulimit -u 500: 设置当前 shell 用户程序上限
+```
+
+## 重定向
+
+```
+command > file   将输出重定向到 file
+command < file   将输入重定向到 file
+command >> file  将输出以追加的方式重定向到 file
+
+n > file
+n >> file
+/*
+文件描述符 0 通常是标准输入（STDIN），1 是标准输出（STDOUT），2 是标准错误输出（STDERR）
+*/
 ```
