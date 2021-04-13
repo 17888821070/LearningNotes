@@ -176,11 +176,9 @@ else
 
 select 允许应用程序监视一组文件描述符，等待一个或者多个描述符成为就绪状态，从而完成 I/O 操作
 
-select 监控的 fd 有上线，取决于 `sizeof(fd_set)` 的大小
+select 监控的 fd 有上限，取决于 `sizeof(fd_set)` 的大小
 
-将 fd 加入 select 监控集的同时，还要再使用一个 array 保存放到 select 监控集中的 fd，一是用于当 select 返回后需要 array 作为源数据和 fd_set 进行 FD_ISSET 判断
-
-select 返回后会把以前加入的但并无事件发生的 fd 清空，则每次开始 select 前都要重新从 array 取得 fd 逐一加入（FD_ZERO最先），扫描 array 的同时取得 fd 最大值 maxfd，用于 select 的第一个参数
+将 fd 加入 select 监控集的同时，还要再使用一个 array 保存放到 select 监控集中的 fd，一是用于当 select 返回后需要 array 作为源数据和 fd_set 进行 FD_ISSET 判断；二是select 返回后会把以前加入的但并无事件发生的 fd 清空，则每次开始 select 前都要重新从 array 取得 fd 逐一加入（FD_ZERO最先），扫描 array 的同时取得 fd 最大值 maxfd，用于 select 的第一个参数
 
 当套接字比较多的时候，每次 `select()` 都要通过遍历 FD_SETSIZE 个 socket 来完成调度，不管哪个 socket 是活跃的，都遍历一遍
 
@@ -300,6 +298,7 @@ int epoll_ctl(int epfd, int op, int fd, struct epoll_event *event);
 // events 用来从内核得到就绪事件的集合
 // maxevents 告诉内核这个 events 有多大
 // timeout 表示等待时的超时时间，以毫秒为单位
+// 返回值是有事件发生的 fd 数目
 int epoll_wait(int epfd, struct epoll_event * events, int maxevents, int timeout);
 
 struct epoll_events {
@@ -324,6 +323,8 @@ EPOLLERR：表示对应的文件描述符发生错误；
 EPOLLHUP：表示对应的文件描述符被挂断；
 EPOLLET：表示对应的文件描述符设定为edge模式；
 EPOLLONESHOT：最多触发其上注册的一个可读、可写、或者异常事件，且只触发一次，使一个 socket 连接任何时刻都只被一个线程所处理，注册了 EPOLLONESHOT 事件的 socket 一旦被某个线程处理完毕，该线程就应该立即重置这个 socket 上的 EPOLLONESHOT 事件，以确保这个 socket 下一次可读
+
+EPOLLET 通过与其他事件取或运算，使该事件成为边缘触发模式
 */
 
 // Create the epoll descriptor. Only one is needed per app, and is used to monitor all sockets.
@@ -351,7 +352,7 @@ if ( epoll_ctl( epollfd, EPOLL_CTL_ADD, pConnection1->getSocket(), &ev ) != 0 )
 struct epoll_event pevents[ 20 ];
 
 // Wait for 10 seconds, and retrieve less than 20 epoll_event and store them into epoll_event array
-int ready = epoll_wait( pollingfd, pevents, 20, 10000 );
+int ret = epoll_wait( pollingfd, pevents, 20, 10000 );
 // Check if epoll actually succeed
 if ( ret == -1 )
     // report error and abort
@@ -385,6 +386,11 @@ epoll 的描述符事件有两种触发模式：LT（level trigger）和 ET（ed
 - LT：默认的一种模式，当 `epoll_wait()` 检测到描述符事件到达时，将此事件通知进程，进程可以不立即处理该事件，下次调用 `epoll_wait()` 会再次通知进程；支持阻塞 socket 和非阻塞 socket
 
 - ET：通知之后进程必须立即处理事件，如果不处理，则下次再调用  `epoll_wait()` 时不会再得到事件到达的通知，很大程度上减少了 epoll 事件被重复触发的次数，因此效率要比 LT 模式高；内核会假设进程知道文件描述符已经就绪，并且不会再为那个文件描述符发送更多的就绪通知，直到进程做了某些操作导致那个文件描述符不再为就绪状态；只支持非阻塞 socket
+
+- LT 模式下，读事件触发后，可以按需收取想要的字节数，不用把本次接收到的数据收取干净，当数据未接受完时读事件仍会触发；ET 模式下，读事件必须把数据收取干净，因为不一定有下一次机会再收取数据了，即使有机会，也可能存在上次没读完的数据没有及时处理，造成客户端响应延迟，即需要循环到 recv 或者 read 函数返回 -1，错误码为 EWOULDBLOCK 或 EAGAIN，因此需搭配非阻塞 socket 使用
+
+- LT 模式下，不需要写事件一定要及时移除，避免不必要的触发，浪费 CPU 资源；ET 模式下，写事件触发后，如果还需要下一次的写事件触发来驱动任务（例如发上次剩余的数据），可继续注册一次检测可写事件
+
 
 ### 应用场景
 
