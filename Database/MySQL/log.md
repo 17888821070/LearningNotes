@@ -16,7 +16,7 @@ InnoDB 的 redo log 是固定大小的，比如可以配置为一组 4 个文件
 
 write pos 是当前记录的位置，一边写一边后移；checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件
 
-write pos 和 checkpoint 之间的部分是可以用来记录新的操作；如果 write pos 追上 checkpoint，这时候不能再执行新的更新，需要把把 checkpoint 推进一下
+write pos 和 checkpoint 之间的部分是可以用来记录新的操作；如果 write pos 追上 checkpoint，这时候不能再执行新的更新，需要把 checkpoint 推进一下
 
 有了 redo log，InnoDB 就可以保证即使数据库发生异常重启，之前提交的记录都不会丢失
 

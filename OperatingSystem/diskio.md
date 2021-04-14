@@ -4,6 +4,8 @@ IO 结构模型分为 Direct IO、mmap 和 Buffer IO
 
 ![0pgqyT.png](https://s1.ax1x.com/2020/09/24/0pgqyT.png)
 
+
+
 ## 缓存 IO
 
 缓存 IO 又被称作标准 IO，大多数文件系统的默认 IO 操作都是缓存 IO
