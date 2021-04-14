@@ -34,7 +34,7 @@ bool test_and_set(std::memory_order order = std::memory_order_seq_cst) volatile 
 bool test_and_set(std::memory_order order = std::memory_order_seq_cst) noexcept;
 ```
 
-![](https://upload-images.jianshu.io/upload_images/6687014-40e5b28ef720dad9.png?imageMogr2/auto-orient/strip|imageView2/2/w/291/format/webp)
+![](../../Picture/Cpp/syntax/atomic/01.webp)
 
 |`memory_order` 取值|意义|
 |:-|:-:|
@@ -157,7 +157,7 @@ bool compare_exchange_weak(T& expect, T desr, memory_order m = memory_order_seq_
 bool compare_exchange_weak(T& expect, T desr, memory_order m = memory_order_seq_cst) noexcept;
 ```
 
-![](https://upload-images.jianshu.io/upload_images/6687014-7b0794e93556901f.png?imageMogr2/auto-orient/strip|imageView2/2/w/321/format/webp)
+![](../../Picture/Cpp/syntax/atomic/02.webp)
 
 与 `compare_exchange_strong` 版本不同， `compare_exchange_strong` 版允许返回伪 false，即使原子对象所封装的值与 expect 的物理内容相同，也仍然返回 false
 

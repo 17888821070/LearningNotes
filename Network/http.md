@@ -4,11 +4,11 @@
 
 URI (Unifrom Resource Identifier) 统一资源标识符，包含 URL (Uniform Resource Locator) 统一资源定位符和 URN (Uniform Resource Name) 统一资源名称
 
-![8cDe3V.png](https://s1.ax1x.com/2020/03/20/8cDe3V.png)
+![](../Picture/Network/http/01.png)
 
 ## URL 构成
 
-![diSMIs.png](https://s1.ax1x.com/2020/08/14/diSMIs.png)
+![](../Picture/Network/http/02.png)
 
 ```cpp
 /*
@@ -32,21 +32,21 @@ http://www.aspxfans.com:8080/news/index.asp?boardID=5&ID=24618&page=1#name
 
 请求头与请求数据间的空行，用来区分请求头和请求数据
 
-![8cDDUA.png](https://s1.ax1x.com/2020/03/20/8cDDUA.png)
+![](../Picture/Network/http/03.png)
 
-![dPj0vF.png](https://s1.ax1x.com/2020/08/14/dPj0vF.png)
+![](../Picture/Network/http/04.png)
 
-![diFqmV.png](https://s1.ax1x.com/2020/08/14/diFqmV.png)
+![](../Picture/Network/http/05.png)
 
 ### 响应报文
 
 响应报文主要由四个部分组成：状态行、消息报头、空行和响应正文
 
-![8cDcgf.png](https://s1.ax1x.com/2020/03/20/8cDcgf.png)
+![](../Picture/Network/http/06.png)
 
-![dPvZMF.png](https://s1.ax1x.com/2020/08/14/dPvZMF.png)
+![](../Picture/Network/http/07.png)
 
-![diFjkF.png](https://s1.ax1x.com/2020/08/14/diFjkF.png)
+![](../Picture/Network/http/08.png)
 
 ### 常见字段
 
@@ -194,7 +194,7 @@ Get 和 Post 的请求都能使用额外的参数，但是 Get 的参数是以�
 
 ## 连接管理
 
-![8gtzH1.png](https://s1.ax1x.com/2020/03/20/8gtzH1.png)
+![](../Picture/Network/http/09.png)
 
 ### 短连接和长连接
 
@@ -298,9 +298,9 @@ HTTP 有以下安全性问题：
 
 通过使用 SSL，HTTPS 具有了混合加密（防窃听）、认证（防伪装）和摘要算法（防篡改）
 
-![wRE3FI.png](https://s1.ax1x.com/2020/09/17/wRE3FI.png)
+![](../Picture/Network/http/10.png)
 
-![8gs7qO.png](https://s1.ax1x.com/2020/03/20/8gs7qO.png)
+![](../Picture/Network/http/11.png)
 
 ### HTTPS 加密方式
 
@@ -336,7 +336,7 @@ HTTPS 采用混合的加密机制
 
 对称加密算法加密数据 + 非对称加密算法交换密钥 + 数字证书验证身份
 
-![wRenyT.png](https://s1.ax1x.com/2020/09/17/wRenyT.png)
+![](../Picture/Network/http/12.png)
 
 1. TCP 三次握手后开始 SSL 通信，双方互相明文交换 SSL 信息
 
@@ -370,7 +370,7 @@ HTTPS 采用混合的加密机制
 
 握手阶段全部结束后，客户端与服务器进入加密通信，就完全是使用普通的 HTTP 协议，只不过用会话密钥加密内容
 
-![0SBGQJ.png](https://s1.ax1x.com/2020/09/24/0SBGQJ.png)
+![](../Picture/Network/http/13.png)
 
 由于 SSL 协议中证书是静态的，因此有必要引入一种随机因素来保证协商出来的会话密钥的随机性； SSL 协议不信任每个主机都能产生完全随机的随机数，如果随机数不随机，那么 pre master key 就有可能被猜出来，那么仅适用 pre master key 作为密钥就不合适了，因此必须引入新的随机因素，那么客户端和服务器加上 pre master key 三个随机数一同生成的密钥就不容易被猜出了，一个伪随机可能完全不随机，可是是三个伪随机就十分接近随机了；对于 RSA 密钥交换算法来说，pre-master-key 本身就是一个随机数，再加上 hello 消息中的随机数，三个随机数通过一个密钥导出器最终导出一个对称密钥
 
@@ -420,7 +420,7 @@ HTTP/2 协议是基于 HTTPS 的，所以 HTTP/2 的安全性也是有保障的
 
 - HTTP/2 不再采用 HTTP/1.1 里的纯文本形式的报文，而是全面采用了二进制格式，HTTP/2 是二进制协议
 
-![wRuuOf.png](https://s1.ax1x.com/2020/09/17/wRuuOf.png)
+![](../Picture/Network/http/14.png)
 
 - 将传输的信息分割为更小的消息和帧，每个二进制帧会标识该帧属于哪个流，流就是由多个帧组成的数据流，因此浏览器收到数据后可以按照流来对数据进行合并而不会出现合并后数据错乱的问题，因此服务器可以并行的传输数据
 

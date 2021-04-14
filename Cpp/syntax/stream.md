@@ -15,7 +15,7 @@ C++ 输入输出包括：
 
 `ios` 是抽象基类，由它派生出 `istream` 类和 `ostream` 类
 
-[![Bvd4M9.png](https://s3.ax1x.com/2020/11/11/Bvd4M9.png)](https://imgchr.com/i/Bvd4M9)
+![](../../Picture/Cpp/syntax/stream/01.png)
 
 `istream` 类支持输入操作，`ostream` 类支持输出操作，`iostream` 类支持输入输出操作
 

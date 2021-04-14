@@ -87,10 +87,3 @@ cosnt string & Student::Name() const
 
 ## 保护继承
 使用保护继承时，基类的公有成员和保护成员将成为派生类的保护成员，
-
-
-## 各种继承方式
-![各种继承方式][1]
-
-
-  [1]: https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1552149954348&di=12d0636df13fcbc0a3730fda80903137&imgtype=0&src=http://aliyunzixunbucket.oss-cn-beijing.aliyuncs.com/png/20180110225741886082.png

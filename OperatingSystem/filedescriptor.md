@@ -10,6 +10,6 @@ Linux 系统中把一切都看做是文件。当进程打开现有文件或创�
 
 操作系统为每个进程维护了一个文件描述符表，该表的值都从 0 开始的，所以在不同的进程中会有相同的文件描述符
 
-[![Bk5dk8.png](https://s1.ax1x.com/2020/10/23/Bk5dk8.png)](https://imgchr.com/i/Bk5dk8)
+![](../Picture/OperatingSystem/filedescriptor/01.png)
 
 fd 相同，不意味着打开的文件相同，因为每个进程都有自己的表，隔离而独立

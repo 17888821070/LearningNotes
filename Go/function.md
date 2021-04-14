@@ -75,7 +75,7 @@ end
 ```
 Go 中 `return` 语句并不是原子操作，分为给返回值赋值和 RET 指令两步
 
-![此处输入图片的描述][1]
+![](../Picture/Go/function/01.png)
 
 ## 变量作用域
 如果局部变量和全局变量重名，优先访问局部变量
@@ -276,6 +276,3 @@ func main() {
 `make`|用来分配引用类型内存
 `append`|用来数组、切片追加元素
 `panic、recover`|错误处理
-
-
-  [1]: https://www.liwenzhou.com/images/Go/func/defer.png

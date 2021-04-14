@@ -150,7 +150,7 @@ dpkg -l 显示已安装软件包列表
 
 文件所有者（Owner）、用户组（Group）、其它用户（Other Users）；只有文件所有者和超级用户可以修改文件或目录的权限
 
-![0pBO56.png](https://s1.ax1x.com/2020/09/24/0pBO56.png)
+![](../Picture/OperatingSystem/command/01.png)
 
 ```
 chmod abc file
@@ -182,7 +182,7 @@ m: 切换显示内存信息模式
 t: 切换显示进程和 CPU 状态信息模型
 ```
 
-[![DCrEj0.png](https://s3.ax1x.com/2020/11/14/DCrEj0.png)](https://imgchr.com/i/DCrEj0)
+![](../Picture/OperatingSystem/command/02.png)
 
 第一行：当前系统时间、系统已运行时间、当前登入用户、系统1分钟5分钟15分钟的负载情况，假设机器的 cpu 核心数为 n，则当负载的平均值为 n 的时候，机器就是刚好满负载运行了，如果大于 n，就是超负荷运行了
 
@@ -194,7 +194,7 @@ t: 切换显示进程和 CPU 状态信息模型
 
 第五行：交换区总量、空闲交换区总量、使用的交换区总量
 
-[![DCgCSH.png](https://s3.ax1x.com/2020/11/14/DCgCSH.png)](https://imgchr.com/i/DCgCSH)
+![](../Picture/OperatingSystem/command/03.png)
 
 PID   -- 进程id
 

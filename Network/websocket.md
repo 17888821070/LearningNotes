@@ -26,7 +26,7 @@ Webscoket 是 Web 浏览器和服务器之间的一种全双工通信协议，�
 
 - WS 的数据帧有序
 
-![0pYQVU.png](https://s1.ax1x.com/2020/09/24/0pYQVU.png)
+![](../Picture/Network/websocket/01.png)
 
 ## 特点
 

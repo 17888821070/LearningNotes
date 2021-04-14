@@ -80,11 +80,9 @@ make([]T, size, cap)
 
 现在有一个数组 `a := [8]int{0, 1, 2, 3, 4, 5, 6, 7}`，切片 `s1 := a[:5]`，`s2 := a[3:6]`，相应示意图如下
 
-![此处输入图片的描述][1]
+![nvQ6AO.png](../Picture/Go/slice/01.png)
 
-
-![此处输入图片的描述][2]
-
+![nvQ6AO.png](../Picture/Go/slice/02.png)
 
 ## 切片不能直接比较
 不能使用 `==` 来判断两个切片是否含有全部相等元素
@@ -98,7 +96,7 @@ s3 := make([]int, 0) //len(s3)=0;cap(s3)=0;s3!=nil   空切片
 // 不要创建使用空切片，统一使用nil切片
 // 避免将切片和nil进行比较来执行某些逻辑
 ```
-![nvQ6AO.png](https://s2.ax1x.com/2019/09/20/nvQ6AO.png)
+![nvQ6AO.png](../Picture/Go/slice/03.jpg)
 
 ## 切片的赋值拷贝
 ```go
@@ -197,6 +195,3 @@ func main() {
 	fmt.Println(a) //[30 31 33 34 35 36 37]
 }
 ```
-  [1]: https://www.liwenzhou.com/images/Go/slice/slice_01.png
-  [2]: https://www.liwenzhou.com/images/Go/slice/slice_02.png
-  [3]: http://p9.pstatp.com/large/pgc-image/5c2ec147981d4ffca3f36c50dd5ecfab

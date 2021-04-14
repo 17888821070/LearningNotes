@@ -1,20 +1,7 @@
 # 网络编程
 
-![此处输入图片的描述][2]
-  
-## socket编程
-Socket 是 BSD UNIX 的进程通信机制，通常也称作”套接字”，用于描述 IP 地址和端口，是一个通信链的句柄
-
-Socket 其实就是一个门面模式，它把复杂的 TCP/IP 协议族隐藏在 Socket 后面，对用户来说只需要调用 Socket 规定的相关函数，让 Socket 去组织符合指定的协议数据然后进行通信
-
-![此处输入图片的描述][3]
-
-
-  [1]: https://www.liwenzhou.com/images/Go/socket/osi.png
-  [2]: https://www.liwenzhou.com/images/Go/socket/httptcpip.png
-  [3]: https://www.liwenzhou.com/images/Go/socket/socket.png
-  
 ## Go实现服务端
+
 一个 TCP 服务端可以同时连接很多个客户端，Go 中创建多个`goroutine`实现并发非常方便和高效，所以可以每建立一次链接就创建一个`goroutine`去处理
 TCP 服务端程序的处理流程：监听端口、接收客户端请求建立链接、创建 `goroutine` 处理链接
 ```go

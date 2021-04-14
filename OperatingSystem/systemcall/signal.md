@@ -2,7 +2,7 @@
 
 每个信号都有一个编号和一个宏定义名称，所有的信号都由操作系统来发
 
-[![DLiV9U.png](https://s3.ax1x.com/2020/12/05/DLiV9U.png)](https://imgchr.com/i/DLiV9U)
+![](../../Picture/OperatingSystem/systemcall/signal/01.png)
 
 ## 分类
 

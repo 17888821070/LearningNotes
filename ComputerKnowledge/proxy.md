@@ -4,7 +4,7 @@
 
 正向代理代替客户端请求服务器，隐藏了真实请求的客户端
 
-![0EAQJI.png](https://s1.ax1x.com/2020/09/28/0EAQJI.png)
+![](../Picture/ComputerKnowledge/proxy/01.png)
 
 功能：
 
@@ -18,7 +18,7 @@
 
 服务端有很多工程模块的时候，需要通过反向代理实现流量的分发
 
-![0Etz36.png](https://s1.ax1x.com/2020/09/28/0Etz36.png)
+![](../Picture/ComputerKnowledge/proxy/02.jpg)
 
 功能：
 

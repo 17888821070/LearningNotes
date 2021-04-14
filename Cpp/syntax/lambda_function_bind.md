@@ -4,7 +4,7 @@
 ```cpp
 [capture](parameters)->return-type {body}
 ```
-![](https://images2018.cnblogs.com/blog/1079669/201807/1079669-20180714213530219-2011197285.png)
+![](../../Picture/Cpp/syntax/lambda/01.png)
 
 lambda 表达式使得可以使用匿名函数
 

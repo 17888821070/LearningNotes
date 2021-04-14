@@ -95,8 +95,7 @@ enum memory_order {
 
 与内存模型相关的枚举类型有以上六种，但是其实分为四类
 
-![0uwItf.png](https://s1.ax1x.com/2020/09/30/0uwItf.png)
-
+![](../../Picture/Cpp/syntax/memorymodel/01.png)
 
 ## C++11 为 `std::atomic` 提供了 4 种 memory ordering
 

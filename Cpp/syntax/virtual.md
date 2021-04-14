@@ -95,7 +95,7 @@ C++ 的动态多态性是通过虚函数来实现的，通过 virtual 函数，�
 
 ### 实现
 
-![8O3WWD.png](https://s1.ax1x.com/2020/03/24/8O3WWD.png)
+![](../../Picture/Cpp/syntax/virtual/01.png)
 
 ```cpp
 /**

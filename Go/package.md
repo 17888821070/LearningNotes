@@ -94,9 +94,5 @@ func main() {
 `init()`函数没有参数也没有返回值
 在程序运行时自动被调用执行，不能在代码中主动调用它
 
-![此处输入图片的描述][1]
-![此处输入图片的描述][2]
-
-
-  [1]: https://www.liwenzhou.com/images/Go/package/init01.png
-  [2]: https://www.liwenzhou.com/images/Go/package/init02.png
+![](../Picture/Go/package/01.png)
+![](../Picture/Go/package/02.png)

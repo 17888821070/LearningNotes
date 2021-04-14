@@ -90,11 +90,11 @@
 
 - 轻量级进程：在内核中来支持用户线程
 
-![w6TH9U.png](https://s1.ax1x.com/2020/09/15/w6TH9U.png)
+![](../Picture/OperatingSystem/process/01.png)
 
-![w67P3D.png](https://s1.ax1x.com/2020/09/15/w67P3D.png)
+![](../Picture/OperatingSystem/process/02.png)
 
-![w67ige.png](https://s1.ax1x.com/2020/09/15/w67ige.png)
+![](../Picture/OperatingSystem/process/03.png)
 
 ### 用户线程
 
@@ -139,7 +139,7 @@ TCB 由用户级线程库函数来维护，可用于不支持线程技术的操�
 
 在一个进程的基本状态，即创建状态、运行状态、就绪状态、阻塞状态、挂起状态、结束状态
 
-![wrqz1e.png](https://s1.ax1x.com/2020/09/14/wrqz1e.png)
+![](../Picture/OperatingSystem/process/04.png)
 
 - 创建状态：进程正在被创建时的状态
 
@@ -151,7 +151,7 @@ TCB 由用户级线程库函数来维护，可用于不支持线程技术的操�
 
 - 结束状态：进程正在从系统中消失时的状态
 
-![wrL8hT.png](https://s1.ax1x.com/2020/09/14/wrL8hT.png)
+![](../Picture/OperatingSystem/process/05.png)
 
 挂起状态表示进程没有占有物理内存空间（由于虚拟内存管理原因，进程所使用的空间可能并没有映射到物理内存，而是在硬盘上）
 
@@ -159,8 +159,7 @@ TCB 由用户级线程库函数来维护，可用于不支持线程技术的操�
 
 - 就绪挂起状态：进程在外存（硬盘），但只要进入内存，即刻立刻运行
 
-![wrOVV1.png](https://s1.ax1x.com/2020/09/14/wrOVV1.png)
-
+![](../Picture/OperatingSystem/process/06.png)
 
 ## 进程控制结构
 
@@ -294,7 +293,7 @@ CPU 上下文切换分成：进程上下文切换、线程上下文切换和中�
 
 同一个进程内多个线程之间可以共享代码段、数据段、打开的文件等资源，但每个线程都有独立一套的寄存器和栈，这样可以确保线程的控制流是相对独立的
 
-![w6oYss.png](https://s1.ax1x.com/2020/09/15/w6oYss.png)
+![](../Picture/OperatingSystem/process/07.png)
 
 系统的任务调度，实际上的调度对象是线程，而进程只是给线程提供了虚拟内存、全局变量等资源
 
@@ -344,7 +343,7 @@ FCFS 对长作业有利，适用于 CPU 繁忙型作业的系统，而不适用�
 
 等待时间越长，优先权越高
 
-![w6jlFA.png](https://s1.ax1x.com/2020/09/15/w6jlFA.png)
+![](../Picture/OperatingSystem/process/08.png)
 
 #### 抢占式时间轮片
 
@@ -378,7 +377,7 @@ FCFS 对长作业有利，适用于 CPU 繁忙型作业的系统，而不适用�
 
 反馈：如果有新的进程加入优先级高的队列时，立刻停止当前正在运行的进程，转而去运行优先级高的队列
 
-![wz7faT.png](https://s1.ax1x.com/2020/09/24/wz7faT.png)
+![](../Picture/OperatingSystem/process/09.png)
 
 - 设置了多个队列，赋予每个队列不同的优先级，每个队列优先级从高到低，同时优先级越高时间片越短
 
@@ -413,13 +412,13 @@ FCFS 对长作业有利，适用于 CPU 繁忙型作业的系统，而不适用�
 通过系统调用 `int pipe(int fd[2])` 创建匿名管道， 并返回了两个描述符，一个是管道的读
 取端描述符 fd[0]，另一个是管道的写入端描述符 fd[1]
 
-![wgIGEq.png](https://s1.ax1x.com/2020/09/16/wgIGEq.png)
+![](../Picture/OperatingSystem/process/10.png)
 
 使用 `fork` 创建子进程，创建的子进程会复制父进程的文件描述符，这样就做到了两个进程各有
 两个 `fd[0]` 与 `fd[1]`，两个进程就可以通过各自的 `fd` 写入和读取同一个管道文件实现跨
 进程通信了
 
-![wgIhKH.png](https://s1.ax1x.com/2020/09/16/wgIhKH.png)
+![](../Picture/OperatingSystem/process/11.png)
 
 如果需要双向通信，则应该创建两个管道
 
@@ -441,7 +440,7 @@ FCFS 对长作业有利，适用于 CPU 繁忙型作业的系统，而不适用�
 间，但有一部分却是映射到相同的物理内存，解决了由用户态向内核态拷贝所消耗的时间；需要依靠某
 种进程同步操作，如互斥锁和信号量等
 
-![w2ut2t.png](https://s1.ax1x.com/2020/09/16/w2ut2t.png)
+![](../Picture/OperatingSystem/process/12.png)
 
 ### 消息队列
 
@@ -455,7 +454,7 @@ FCFS 对长作业有利，适用于 CPU 繁忙型作业的系统，而不适用�
 消息队列不适合比较大数据的传输，因为在内核中每个消息体都有一个最大长度的限制，同时所有队列
 所包含的全部消息体的总长度也是有上限
 
-![w2m9Gq.png](https://s1.ax1x.com/2020/09/16/w2m9Gq.png)
+![](../Picture/OperatingSystem/process/13.png)
 
 ```cpp
 // key：用来指定返回 MQ 的 ID
@@ -860,10 +859,12 @@ Linux 启动时，0 进程启动 1 号进程 (init) 和 2 号进程(内核线程
 PCB 里有个数组专门用于记录打开的文件，数组元素为指向所打开的文件所创建的文件表项，文件表项是用于描述文件当前被某个进程打开后的状态信息，包括文件状态标志，记录当前文件读取的位移量，以及文件的 i 节点指针
 
 不同进程打开同一个文件后，进程表和文件表的关系；`fork()` 之后打开文件，与不同进程打开同一文件情况相同
-![0PVZLj.jpg](https://s1.ax1x.com/2020/09/26/0PVZLj.jpg)
+
+![](../Picture/OperatingSystem/process/14.jpg)
 
 `fork()` 之前打开文件，子进程是共享父进程的文件表项
-![0PV3SU.jpg](https://s1.ax1x.com/2020/09/26/0PV3SU.jpg)
+
+![](../Picture/OperatingSystem/process/15.jpg)
 
 进程调用 `fork()` 后，子进程和父进程的文件描述符所对应的文件表项是共享的，这意味着子进程对文件的读写直接影响父进程的文件位移量(反之同理)
 
@@ -896,5 +897,3 @@ PCB 里有个数组专门用于记录打开的文件，数组元素为指向所�
 - 当进程首次申请资源时，要测试该线程对资源的最大需求量，如果系统现存的资源可以满足它的最大需求量则按当前的申请量分配资源，否则就推迟分配
 
 - 当线程在执行中继续申请资源时，先测试该线程已占用的资源数与本次申请的资源数之和是否超过了该线程对资源的最大需求量，若超过则拒绝分配资源，若没有超过则再测试系统现存的资源能否满足该进程尚需的最大资源量，若能满足则按当前的申请量分配资源，否则也要推迟分配
-
-

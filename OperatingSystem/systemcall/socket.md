@@ -20,11 +20,11 @@ socket 即是一种特殊的文件，一些 socket 函数就是对其进行的�
 
 - tcp 
 
-![8RSr0x.png](https://s1.ax1x.com/2020/03/21/8RSr0x.png)
+![](../../Picture/OperatingSystem/systemcall/socket/01.png)
 
 - udp
 
-[![GE8R7n.png](https://s1.ax1x.com/2020/03/29/GE8R7n.png)](https://imgchr.com/i/GE8R7n)
+![](../../Picture/OperatingSystem/systemcall/socket/02.png)
 
 ## 核心函数
 
@@ -357,7 +357,7 @@ TCP 协议独立于 `write()/send()` 函数，数据有可能刚被写入缓冲�
 
 对于数值 0x1234567，使用四个字节存储
 
-![8hyYbq.png](https://s1.ax1x.com/2020/03/21/8hyYbq.png)
+![](../../Picture/OperatingSystem/systemcall/socket/03.png)
 
 ```cpp
 void judge_bigend_littleend() {
@@ -447,7 +447,7 @@ fcntl(socket_fd, F_SETFL, flag & ~O_NONBLOCK);
 
 一般出错的地方是调用 `connect()`、`recv()`、`send()`
 
-[![DoQcLQ.png](https://s3.ax1x.com/2020/12/02/DoQcLQ.png)](https://imgchr.com/i/DoQcLQ)
+![](../../Picture/OperatingSystem/systemcall/socket/04.png)
 
 ### 客户端连接服务器未监听端口
 

@@ -62,13 +62,13 @@ void allocator::destroy(pointer p)
 
 STL 使用双层级配置器，第一级采用 `malloc/free`，第二级视情况采用不同策略，从而解决内存碎片问题
 
-![w7zAi9.png](https://s1.ax1x.com/2020/09/21/w7zAi9.png)
+![w7zAi9.png](../../Picture/Cpp/STL/allocator/01.png)
 
-![w7z8JA.png](https://s1.ax1x.com/2020/09/21/w7z8JA.png)
+![w7zAi9.png](../../Picture/Cpp/STL/allocator/02.png)
 
 第二级配置器目的解决小型区块造成的内存碎片问题，将需要的内存上调至 8 的倍数；内存池有 128  / 8 = 16 个 free list，各自管理大小分别为 8、16、24、32、40、48、56、64、72、80、88、96、104、112、120、128 bytes 的小额区块
 
-![0Jk3bF.png](https://s1.ax1x.com/2020/10/04/0Jk3bF.png)
+![w7zAi9.png](../../Picture/Cpp/STL/allocator/03.png)
 
 freelist 是一个指针数组，当要开辟空间大小内存对应的数组元素的值为空指针时会先开辟 20 个相应的大小的内存，并将其切割成 20 个小块，在内存块头部用 `union obj` 占用 4 个字节将全部小块串联起来，使用时会再将这 4 个字节覆盖
 

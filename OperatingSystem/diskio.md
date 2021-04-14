@@ -2,9 +2,7 @@
 
 IO 结构模型分为 Direct IO、mmap 和 Buffer IO
 
-![0pgqyT.png](https://s1.ax1x.com/2020/09/24/0pgqyT.png)
-
-
+![](../Picture/OperatingSystem/diskio/01.png)
 
 ## 缓存 IO
 
@@ -48,7 +46,7 @@ IO 结构模型分为 Direct IO、mmap 和 Buffer IO
 
 mmap 是一种内存映射文件的方法，即将一个文件或者其它对象映射到进程的地址空间，实现文件磁盘地址和进程虚拟地址空间中一段虚拟地址的一一对映关系；实现这样的映射关系后，进程就可以采用指针的方式读写操作这一段内存，而系统会自动回写脏页面到对应的文件磁盘上，即完成了对文件的操作而不必再调用 `read`、`write` 等系统调用函数。相反，内核空间对这段区域的修改也直接反映用户空间，从而可以实现不同进程间的文件共享
 
-![09Dy38.png](https://s1.ax1x.com/2020/09/25/09Dy38.png)
+![](../Picture/OperatingSystem/diskio/02.png)
 
 内存映射服务的地址空间处在堆栈之间的空余部分
 
