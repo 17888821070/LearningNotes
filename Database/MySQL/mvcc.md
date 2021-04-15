@@ -84,7 +84,7 @@ ReadView 包含四个比较重要的内容：
 
 ### REPEATABLE READ
 
-首次读取数据会创建 ReadView
+事务启动时创建 ReadView，整个事务期间都使用同一个 ReadView
 
 ## 例子
 
