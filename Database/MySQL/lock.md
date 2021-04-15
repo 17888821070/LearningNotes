@@ -88,11 +88,11 @@ InnoDB 行锁是通过给索引上的索引项加锁来实现的；只有通过�
 
 - 使用聚簇索引等值查询
 
-![wKZYTJ.png](https://s1.ax1x.com/2020/09/07/wKZYTJ.png)
+![](../../Picture/Database/MySQL/lock/01.png)
 
 - 使用唯一索引等值查询
 
-![wKZaf1.png](https://s1.ax1x.com/2020/09/07/wKZaf1.png)
+![](../../Picture/Database/MySQL/lock/02.png)
 
 ### Gap lock
 
@@ -100,21 +100,20 @@ InnoDB 行锁是通过给索引上的索引项加锁来实现的；只有通过�
 
 - 使用一般索引等值查询：不仅给相应索引和聚簇索引加 record lock，还要给索引间隙加 gap lock
 
-![wKZDOO.png](https://s1.ax1x.com/2020/09/07/wKZDOO.png))
+![](../../Picture/Database/MySQL/lock/03.png)
 
-![wKZT0g.png](https://s1.ax1x.com/2020/09/07/wKZT0g.png)
-
+![](../../Picture/Database/MySQL/lock/04.png)
 
 - 无索引查询：将聚簇索引中的所有行以及间隙都锁起来，等于锁表了
 
-![wKmfL8.png](https://s1.ax1x.com/2020/09/07/wKmfL8.png)
+![](../../Picture/Database/MySQL/lock/05.png)
 
 
 ### Next-key lock
 
 record+gap 锁定一个范围，并包含记录本身；对于行的查询使用 next-key lock，解决幻读问题；把查询出来的记录锁住，同时也会把该范围查询内的所有间隙空间也会锁住，再之它会把相邻的下一个区间也会锁住；当使用唯一索引且得到的结果只有 1 条则降级为 Record lock；RR 级别使用该方式加锁
 
-![wAttSI.png](https://s1.ax1x.com/2020/09/04/wAttSI.png)
+![](../../Picture/Database/MySQL/lock/06.png)
 
 ## 锁机制划分
 

@@ -6,20 +6,21 @@ Trie 树的本质，就是利用字符串之间的公共前缀，将重复的前
 
 将 how, hi, her, hello, so, see 组织成 Trie 树为：
 
-![](https://static001.geekbang.org/resource/image/28/32/280fbc0bfdef8380fcb632af39e84b32.jpg)
+![](../Picture/DataStruct/trie/01.jpg)
 
 根节点不包含任务信息，每个节点表示一个字符串中的字符，从根节点到红色节点的一条路径表示一个字符串（红色节点不是叶子结点）
 
 构造过程：
-![](https://static001.geekbang.org/resource/image/f8/6c/f848a7d8bda3d4f8bb4a7cbfaabab66c.jpg)
 
-![](https://static001.geekbang.org/resource/image/06/b6/06b45fde2ca8077465e0c557bc749ab6.jpg)
+![](../Picture/DataStruct/trie/02.jpg)
+
+![](../Picture/DataStruct/trie/03.jpg)
 
 ### 实现
 
 1. 借助散列表的思想，通过一个下标与字符的映射数组，来存储子节点的指针
 
-![](https://static001.geekbang.org/resource/image/f5/35/f5a4a9cb7f0fe9dcfbf29eb1e5da6d35.jpg)
+![](../Picture/DataStruct/trie/04.jpg)
 
 ```cpp
 class TrieNode

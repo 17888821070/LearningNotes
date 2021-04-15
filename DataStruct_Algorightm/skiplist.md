@@ -8,16 +8,13 @@
 
 跳表是一种各方面性能都比较优秀的动态数据结构，可以支持快速的插入、删除、查找操作，写起来也不复杂
 
-![此处输入图片的描述][1]
+![](../Picture/DataStruct/skiplist/01.jpg)
 
-
-![此处输入图片的描述][2]
-
+![](../Picture/DataStruct/skiplist/02.jpg)
 
 对链表建立一级“索引”，每两个节点提取一个节点到上一级，把抽出来的那一级叫做索引或索引层；如图， down 指针指向下一级节点；加上一层索引之后，查找一个节点需要遍历的节点个数减少，查找效率提升了
   
-![此处输入图片的描述][3]
-
+![](../Picture/DataStruct/skiplist/03.jpg)
 
 在一级索引的基础上，每两个节点就抽出一个节点到第二级索引，需要遍历的节点数量又减少了这种链表加多级索引的结构就是跳表
 
@@ -33,19 +30,11 @@
 ### 动态插入和删除
 动态插入、删除的时间复杂度也是 O(logn)
 
-![此处输入图片的描述][4]
-
+![](../Picture/DataStruct/skiplist/04.jpg)
 
 删除时，如果节点在索引中出现，我们除了删除原始链表中的节点，还要删除索引中的
   
- ### 索引动态更新
+### 索引动态更新
 当不停往调表中插入数据时，如果不更新索引就有可能出现某两个索引节点之间数据非常多，极端情况下跳表会退化成单链表；我们需要某种手段来维护索引与原始链表大小之间的平衡，也就是说如果链表中结点多了，索引节点也要相应的增加；通过一个随机函数，来决定将这个结点插入到哪几级索引中，比如随机生成一个k ，那就将这个结点添加到第一级到第 k 级的索引中
 
-![此处输入图片的描述][5]
-
-
-  [1]: https://static001.geekbang.org/resource/image/e1/6d/e18303fcedc068e5a168de04df956f6d.jpg
-  [2]: https://static001.geekbang.org/resource/image/14/8e/14753c824a5ee4a976ea799727adc78e.jpg
-  [3]: https://static001.geekbang.org/resource/image/49/65/492206afe5e2fef9f683c7cff83afa65.jpg
-  [4]: https://static001.geekbang.org/resource/image/65/6c/65379f0651bc3a7cfd13ab8694c4d26c.jpg
-  [5]: https://static001.geekbang.org/resource/image/a8/a7/a861445d0b53fc842f38919365b004a7.jpg
+![](../Picture/DataStruct/skiplist/05.jpg)

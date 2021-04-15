@@ -12,7 +12,7 @@ InnoDB 引擎会在适当的时候，将这个操作记录更新到磁盘里面�
 
 InnoDB 的 redo log 是固定大小的，比如可以配置为一组 4 个文件，每个文件的大小是 1GB，那么redo log 总共就可以记录 4GB 的操作，从头开始写，写到末尾就又回到开头循环写
 
-[![stScqI.png](https://s3.ax1x.com/2021/01/13/stScqI.png)](https://imgchr.com/i/stScqI)
+![](../../Picture/Database/MySQL/log/01.png)
 
 write pos 是当前记录的位置，一边写一边后移；checkpoint 是当前要擦除的位置，也是往后推移并且循环的，擦除记录前要把记录更新到数据文件
 

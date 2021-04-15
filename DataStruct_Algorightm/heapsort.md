@@ -14,7 +14,7 @@
 完全二叉树比较适合用数组来存储，不需要存储左右节点的指针，单纯通过数组的下标就可以找到一个节点的左右子节点和父节点
 数组下标为 i 的节点，左子节点下标为 2 * i，右子节点下标为 2 * i + 1，父节点下标为 i / 2
 
-![此处输入图片的描述][1]
+![](../Picture/DataStruct/heap/01.jpg)
 
 ### 插入
 往堆中插入一个元素后，需要进行调整让其满足堆的特性，叫做堆化
@@ -22,9 +22,8 @@
 顺着节点所在路径向上或向下，对比然后交换
 
 从下往上的堆化：
-![此处输入图片的描述][2]
 
-
+![](../Picture/DataStruct/heap/02.jpg)
 
 ### 删除堆顶元素
 
@@ -32,7 +31,7 @@
 
 从上往下的堆化：
 
-![此处输入图片的描述][4]
+![](../Picture/DataStruct/heap/03.jpg)
 
 ### 复杂度
 堆化的时间复杂度 O(logn)，插入和删除堆顶元素的主要逻辑是堆化所以时间复杂度也是 O(logn)
@@ -53,15 +52,14 @@
 
 - 第二种方法：从后往前处理数组，每个数据都是从上往下堆化；因为叶子节点往下堆化只能跟自己比较，所以从第一个非叶子节点开始，即下标从 n/2 开始到 1 的数据进行堆化，下标 n/2+1 到 n 的节点都是叶子节点，不需要堆化；
 
-![此处输入图片的描述][6]
-![](https://static001.geekbang.org/resource/image/aa/9d/aabb8d15b1b92d5e040895589c60419d.jpg)
+![](../Picture/DataStruct/heap/04.jpg)
 
+![](../Picture/DataStruct/heap/05.jpg)
 
 ### 排序
 建堆结束之后，数组中的数据已经按照大顶堆的特性组织的；把数组中第一个元素跟最后一个元素交换，最大元素就放到了下标为 n 的位置，类似于删除堆顶元素操作；堆顶元素移除后把下标为 n 的元素放到堆顶，然后再堆化，以此类推完成排序
 
-![此处输入图片的描述][5]
-
+![](../Picture/DataStruct/heap/06.jpg)
 
 ## 与快排比较
 1. 堆排序数据访问方式没有快排友好：堆排跳着访问数据，快排顺序访问数据，对CPU缓存不友好
@@ -78,33 +76,3 @@
 - 求Top K
 
 - 求中位数
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  [1]: https://static001.geekbang.org/resource/image/4d/1e/4d349f57947df6590a2dd1364c3b0b1e.jpg
-  [2]: https://static001.geekbang.org/resource/image/e3/0e/e3744661e038e4ae570316bc862b2c0e.jpg
-  [4]: https://static001.geekbang.org/resource/image/11/60/110d6f442e718f86d2a1d16095513260.jpg
-  [5]: https://static001.geekbang.org/resource/image/23/d1/23958f889ca48dbb8373f521708408d1.jpg
-  [6]: https://static001.geekbang.org/resource/image/50/1e/50c1e6bc6fe68378d0a66bdccfff441e.jpg

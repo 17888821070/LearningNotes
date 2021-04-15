@@ -10,7 +10,7 @@ Hash 的编码可以是 ziplist 或者 hashtable
 
 - 先添加到 Hash 中的键值对会被放在压缩列表的表头方向，后来添加到 Hash 中的键值对会被放在压缩列表的表尾方向
 
-[![DdUBjS.png](https://s3.ax1x.com/2020/11/25/DdUBjS.png)](https://imgchr.com/i/DdUBjS)
+![](../../Picture/Database/Redis/hash/01.png)
 
 ## hashtable
 
@@ -20,7 +20,7 @@ Hash 的每个键值对都使用一个字典键值对来保存
 
 - 字典的每个值都是一个字符串对象， 对象中保存了键值对的值
 
-[![DdasxK.png](https://s3.ax1x.com/2020/11/25/DdasxK.png)](https://imgchr.com/i/DdasxK)
+![](../../Picture/Database/Redis/hash/02.png)
 
 ## 编码转换
 

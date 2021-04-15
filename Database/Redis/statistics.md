@@ -4,7 +4,7 @@
 
 不同统计模式适合使用不同的集合类型
 
-[![DBmEUU.png](https://s3.ax1x.com/2020/11/26/DBmEUU.png)](https://imgchr.com/i/DBmEUU)
+![](../../Picture/Database/Redis/statistics/01.png)
 
 ## 聚合统计
 

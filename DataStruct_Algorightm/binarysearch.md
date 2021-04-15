@@ -24,8 +24,7 @@
 ![此处输入图片的描述][1]
 
 
-  [1]: https://static001.geekbang.org/resource/image/42/36/4221d02a2e88e9053085920f13f9ce36.jpg
-    
+![](../Picture/DataStruct/binarysearch/01.jpg)
 
 ---
 

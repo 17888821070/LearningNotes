@@ -343,7 +343,7 @@ HAVING function(column_name)
 SELECT a.column1, a.column2, b.column1 from tab1 a INNER JOIN tab2 b on a.column1 = b.column1;
 ```
 
-![aieggK.png](https://s1.ax1x.com/2020/07/27/aieggK.png)
+![](../../Picture/Database/MySQL/sql/01.png)
 
 #### LEFT JOIN
 
@@ -353,7 +353,7 @@ SELECT a.column1, a.column2, b.column1 from tab1 a LEFT JOIN tab2 b on a.column1
 
 获取左表所有记录，即使右表没有对应匹配的记录
 
-![aiebgf.png](https://s1.ax1x.com/2020/07/27/aiebgf.png)
+![](../../Picture/Database/MySQL/sql/02.png)
 
 #### RIGHT JOIN
 
@@ -364,15 +364,15 @@ SELECT a.column1, a.column2, b.column1 from tab1 a RIGHT JOIN tab2 b on a.column
 
 获取右表所有记录，即使左表没有对应匹配的记录
 
-![aieOKS.png](https://s1.ax1x.com/2020/07/27/aieOKS.png)
+![](../../Picture/Database/MySQL/sql/03.png)
 
 #### FULL OUTER JOIN
 
 只要左表和右表其中一个表中存在匹配，则返回行；FULL OUTER JOIN 关键字结合了 LEFT JOIN 和 RIGHT JOIN 的结果
 
-![dgkdIA.png](https://s1.ax1x.com/2020/08/25/dgkdIA.png)
+![](../../Picture/Database/MySQL/sql/04.png)
 
-[![dgPvJP.png](https://s1.ax1x.com/2020/08/25/dgPvJP.png)](https://imgchr.com/i/dgPvJP)
+![](../../Picture/Database/MySQL/sql/05.png)
 
 ### NULL 值处理
 

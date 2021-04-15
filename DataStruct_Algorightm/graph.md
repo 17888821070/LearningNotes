@@ -2,7 +2,7 @@
 
 图是非线性表数据结构，涉及到图的搜索、最短路径、最小生成树、二分图等
 
-![](https://static001.geekbang.org/resource/image/df/af/df85dc345a9726cab0338e68982fd1af.jpg)
+![](../Picture/DataStruct/graph/01.jpg)
 
 ## 定义
 
@@ -13,8 +13,7 @@
 - 无向图中顶点有度，有向图中顶点有入度（In-degree，表示有多少条边指向这个顶点）和出度（Out-degree，表示有多少条边以这个顶点为起点指向其他顶点）
 - 带权图（weighted graph）每条边都有一个权重（weight）
 
-![](https://static001.geekbang.org/resource/image/55/e8/55d7e4806dc47950ae098d959b03ace8.jpg)
-
+![](../Picture/DataStruct/graph/02.jpg)
 
 ## 存储
 
@@ -26,7 +25,7 @@
 - 有向图：如果顶点 i 指向顶点 j ，则将 `A[i][j]` 标记为 1；
 - 带权图： `A[i][j]` 存储相应权值
 
-![](https://static001.geekbang.org/resource/image/62/d2/625e7493b5470e774b5aa91fb4fdb9d2.jpg)
+![](../Picture/DataStruct/graph/03.jpg)
 
 
 用领接矩阵表示图，虽然简单、直观，因为基于数组所以在获取两个顶点关系时非常高效，同时可以将很多图的运算转换成矩阵的运算，但比较浪费存储空间
@@ -40,10 +39,9 @@
 
 每个顶点对应一个链表，链表中存储的是与这个顶点相连接的其他顶点
 
-![](https://static001.geekbang.org/resource/image/03/94/039bc254b97bd11670cdc4bf2a8e1394.jpg)
+![](../Picture/DataStruct/graph/04.jpg)
 
 领接矩阵存储起来浪费空间，但使用节省时间；领接表存储节省空间，但使用浪费时间
-
 
 ## 搜索
 
@@ -87,7 +85,7 @@ public：
 
 一种“地毯式”层层推进的搜索策略，即先查找离起始顶点最近的，然后是次近的，依次往外搜索
 
-![](https://static001.geekbang.org/resource/image/00/ea/002e9e54fb0d4dbf5462226d946fa1ea.jpg)
+![](../Picture/DataStruct/graph/05.jpg)
 
 广度搜索的路径是最短路径
 
@@ -156,10 +154,11 @@ void CGraph::BFS(int start, int end)
 
 `prev` 用来记录搜索路径
 
-![](https://static001.geekbang.org/resource/image/4f/3a/4fea8c4505b342cfaf8cb0a93a65503a.jpg)
-![](https://static001.geekbang.org/resource/image/ea/23/ea00f376d445225a304de4531dd82723.jpg)
-![](https://static001.geekbang.org/resource/image/4c/39/4cd192d4c220cc9ac8049fd3547dba39.jpg)
+![](../Picture/DataStruct/graph/06.jpg)
 
+![](../Picture/DataStruct/graph/07.jpg)
+
+![](../Picture/DataStruct/graph/08.jpg)
 
 最坏情况下，终止顶点 t 离起始顶点 s 很远，需要遍历完整个图才能找到，所以广度优先搜索的时间复杂度是 O(V+E)，其中，V 表示顶点的个数，E 表示边的个数；对于一个连通图来说，也就是说一个图中的所有顶点都是连通的，E 肯定要大于等于 V - 1，所以，广度优先搜索的时间复杂度也可以简写为 O(E)
 
@@ -171,7 +170,7 @@ void CGraph::BFS(int start, int end)
 
 深度优先搜索找出来的路径并不是最短路径
 
-![](https://static001.geekbang.org/resource/image/87/85/8778201ce6ff7037c0b3f26b83efba85.jpg)
+![](../Picture/DataStruct/graph/09.jpg)
 
 ```cpp
 void CGraph::DFS(int start, int end)

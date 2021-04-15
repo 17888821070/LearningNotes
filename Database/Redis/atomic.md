@@ -15,7 +15,7 @@ SET(id, current)
 
 对临界区代码的执行没有控制机制，就会出现数据更新错误
 
-[![r7A0Te.png](https://s3.ax1x.com/2020/12/28/r7A0Te.png)](https://imgchr.com/i/r7A0Te)
+![](../../Picture/Database/Redis/atomic/01.png)
 
 并发访问控制，是指对多个客户端访问操作同一份数据的过程进行控制，以保证任何一个客户端发送的操作在 Redis 实例上执行时具有互斥性
 

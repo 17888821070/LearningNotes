@@ -1,12 +1,12 @@
 # 缓存异常
 
-[![rdM2tA.png](https://s3.ax1x.com/2020/12/20/rdM2tA.png)](https://imgchr.com/i/rdM2tA)
+![](../../Picture/Database/Redis/exception/01.png)
 
 ## 缓存雪崩
 
 大量的应用请求无法在 Redis 缓存中进行处理，紧接着，应用将大量请求发送到数据库层，导致数据库层的压力激增
 
-[![rdneoR.png](https://s3.ax1x.com/2020/12/20/rdneoR.png)](https://imgchr.com/i/rdneoR)
+![](../../Picture/Database/Redis/exception/02.png)
 
 ### 缓存中有大量数据同时过期
 
@@ -14,17 +14,17 @@
 
 服务降级，发生缓存雪崩时，针对不同的数据采取不同的处理方式；访问非核心数据时，暂时停止从缓存中查询这些数据，而是直接返回预定义信息、空值或是错误信息；访问核心数据时，允许查询缓存，如果缓存缺失，也可以继续通过数据库读取
 
-[![rdnlQO.png](https://s3.ax1x.com/2020/12/20/rdnlQO.png)](https://imgchr.com/i/rdnlQO)
+![](../../Picture/Database/Redis/exception/03.png)
 
 ### Redis 缓存实例发生故障宕机
 
 在业务系统中实现服务熔断或请求限流机制：在发生缓存雪崩时，为了防止引发连锁的数据库雪崩，甚至是整个系统的崩溃，我们暂停业务应用对缓存系统的接口访问
 
-[![rdn3Oe.png](https://s3.ax1x.com/2020/12/20/rdn3Oe.png)](https://imgchr.com/i/rdn3Oe)
+![](../../Picture/Database/Redis/exception/04.png)
 
 服务熔断虽然可以保证数据库的正常运行，但是暂停了整个缓存系统的访问，对业务应用的影响范围大。为了尽可能减少这种影响，我们也可以进行请求限流；在业务系统的请求入口前端控制每秒进入系统的请求数，避免过多的请求被发送到数据库
 
-[![rdnsmQ.png](https://s3.ax1x.com/2020/12/20/rdnsmQ.png)](https://imgchr.com/i/rdnsmQ)
+![](../../Picture/Database/Redis/exception/05.png)
 
 通过主从节点的方式构建 Redis 缓存高可靠集群，主节点故障宕机，从节点还可以切换成为主节点，继续提供缓存服务，避免了由于缓存实例宕机而导致的缓存雪崩问题
 
@@ -34,7 +34,7 @@
 
 缓存击穿的情况，经常发生在热点数据过期失效时
 
-[![rdup0H.png](https://s3.ax1x.com/2020/12/20/rdup0H.png)](https://imgchr.com/i/rdup0H)
+![](../../Picture/Database/Redis/exception/06.png)
 
 ### 热点数据不设置过期时间
 
@@ -44,7 +44,7 @@
 
 缓存穿透是指要访问的数据既不在 Redis 缓存中，也不在数据库中，导致请求在访问缓存时，发生缓存缺失，再去访问数据库时，发现数据库中也没有要访问的数据；应用无法从数据库中读取数据再写入缓存来服务后续请求，这样一来缓存也就成了摆设，如果应用持续有大量请求访问数据，就会同时给缓存和数据库带来巨大压力
 
-[![rduj5n.png](https://s3.ax1x.com/2020/12/20/rduj5n.png)](https://imgchr.com/i/rduj5n)
+![](../../Picture/Database/Redis/exception/07.png)
 
 原因：
 

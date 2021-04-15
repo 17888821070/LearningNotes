@@ -10,7 +10,7 @@ Redis 实例在运行时，要和许多对象进行交互，这些不同的交�
 
 - 切片集群实例：向其他实例传输哈希槽信息，数据迁移
 
-[![D7VnOA.png](https://s3.ax1x.com/2020/12/03/D7VnOA.png)](https://imgchr.com/i/D7VnOA)
+![](../../Picture/Database/Redis/async/01.png)
 
 ## 阻塞风险
 
@@ -90,4 +90,4 @@ Redis 主线程启动后，会使用操作系统提供的 pthread_create 函数�
 
 当 AOF 日志配置成 always 时，Redis 需要确保每个操作记录日志都写回磁盘，如果用后台子线程异步完成，主线程就无法及时地知道每个操作是否已经完成了，所以 always 策略并不使用后台子线程来执行
 
-[![D731zt.png](https://s3.ax1x.com/2020/12/03/D731zt.png)](https://imgchr.com/i/D731zt)
+![](../../Picture/Database/Redis/async/02.png)

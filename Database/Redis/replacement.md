@@ -26,7 +26,7 @@
 
 ## 淘汰策略
 
-[![rmZsOI.png](https://s3.ax1x.com/2020/12/13/rmZsOI.png)](https://imgchr.com/i/rmZsOI)
+![](../../Picture/Database/Redis/replacement/01.png)
 
 volatie-* 四种淘汰策略，筛选的候选数据范围，被限制在已经设置了过期时间的键值对上，即使缓存没有写满，这些数据如果过期了，也会被删除
 
@@ -82,7 +82,7 @@ LRU 算法的全称是 Least Recently Used，按照最近最少使用的原则�
 
 LRU 会把所有的数据组织成一个链表，链表的头和尾分别表示 MRU 端和 LRU 端，分别代表最近最常使用的数据和最近最不常用的数据
 
-[![rmmZ5T.png](https://s3.ax1x.com/2020/12/13/rmmZ5T.png)](https://imgchr.com/i/rmmZ5T)
+![](../../Picture/Database/Redis/replacement/02.png)
 
 LRU 算法选择删除数据时，都是从 LRU 端开始，所以把刚刚被访问的数据移到 MRU 端，就可以让它们尽可能地留在缓存中
 
@@ -112,7 +112,7 @@ Redis 在实现 LFU 策略的时候，只是把原来 24bit 大小的 lru 字段
 
 ## 淘汰操作
 
-[![rmnWtK.png](https://s3.ax1x.com/2020/12/13/rmnWtK.png)](https://imgchr.com/i/rmnWtK)
+![](../../Picture/Database/Redis/replacement/03.png)
 
 干净数据和脏数据的区别就在于，和最初从后端数据库里读取时的值相比，有没有被修改过。干净数据一直没有被修改，所以后端数据库里的数据也是最新值。在替换时，它可以被直接删除
 

@@ -8,13 +8,13 @@ Redis 提供了主从库模式，以保证数据副本的一致，主从库之�
 
 - 写操作：首先到主库执行，然后主库将写操作同步给从库
 
-[![DnswKf.png](https://s3.ax1x.com/2020/11/18/DnswKf.png)](https://imgchr.com/i/DnswKf)
+![](../../Picture/Database/Redis/masterslave/01.png)
 
 ## 主从库第一次同步
 
 当启动多个 Redis 实例的时候，它们相互之间就可以通过 replicaof 命令形成主库和从库的关系，之后会按照三个阶段完成数据的第一次同步；执行 replicaof 的实例为从库
 
-[![Dnymdg.png](https://s3.ax1x.com/2020/11/18/Dnymdg.png)](https://imgchr.com/i/Dnymdg)
+![](../../Picture/Database/Redis/masterslave/02.png)
 
 1. 第一阶段是主从库间建立连接、协商同步的过程，主要是为全量复制做准备；从库和主库建立起连接，并告诉主库即将进行同步，主库确认回复后，主从库间就可以开始同步了；从库给主库发送 psync 命令，表示要进行数据同步，主库根据这个命令的参数来启动复制；psync 命令包含了主库的 runID 和复制进度 offset 两个参数；runID 是每个 Redis 实例启动时都会自动生成的一个随机 ID，用来唯一标记这个实例；当从库和主库第一次复制时，因为不知道主库的 runID，所以将 runID 设为 `?`；offset 设为 -1，表示第一次复制
 
@@ -36,7 +36,7 @@ fork 这个操作会阻塞主线程处理正常请求，从而导致主库响应
 
 在部署主从集群的时候，可以手动选择一个从库，用于级联其他的从库；再选择一些从库执行 replicaof，让它们和刚才所选的从库，建立起主从关系
 
-[![Dn63hd.png](https://s3.ax1x.com/2020/11/18/Dn63hd.png)](https://imgchr.com/i/Dn63hd)
+![](../../Picture/Database/Redis/masterslave/03.png)
 
 ## 主从网络连接
 
@@ -50,13 +50,13 @@ repl_backlog_buffer 是一个环形缓冲区，主库会记录自己写到的位
 
 刚开始的时候，主库和从库的写读位置在一起，是它们的起始位置；随着主库不断接收新的写操作，它在缓冲区中的写位置会逐步偏离起始位置，对主库来说对应的偏移量就是 master_repl_offset，主库接收的新写操作越多，这个值就会越大；从库在复制完写操作命令后，它在缓冲区中的读位置也开始逐步偏移刚才的起始位置，从库已复制的偏移量 slave_repl_offset 也在不断增加；正常情况下，这两个偏移量基本相等
 
-[![DngaFg.png](https://s3.ax1x.com/2020/11/18/DngaFg.png)](https://imgchr.com/i/DngaFg)
+![](../../Picture/Database/Redis/masterslave/04.png)
 
 在网络断连阶段，主库可能会收到新的写操作命令，所以，一般来说，master_repl_offset 会大于 slave_repl_offset；主库只用把 master_repl_offset 和 slave_repl_offset 之间的命令操作同步给从库就行
 
 主从库的连接恢复之后，从库首先会给主库发送 psync 命令，并把自己当前的 slave_repl_offset 发给主库，主库会判断自己的 master_repl_offset 和 slave_repl_offset 之间的差距
 
-[![DngOte.png](https://s3.ax1x.com/2020/11/18/DngOte.png)](https://imgchr.com/i/DngOte)
+![](../../Picture/Database/Redis/masterslave/05.png)
 
 因为 repl_backlog_buffer 是一个环形缓冲区，所以在缓冲区写满后，主库会继续写入，此时，就会覆盖掉之前写入的操作；如果从库的读取速度比较慢，就有可能导致从库还未读取的操作被主库新写的操作覆盖了，这会导致主从库间的数据不一致
 
@@ -76,7 +76,7 @@ repl_backlog_buffer 是一个环形缓冲区，主库会记录自己写到的位
 
 2. 开发一个外部程序来监控主从库间的复制进度；Redis 的 INFO replication 命令可以查看主库接收写命令的进度信息（master_repl_offset）和从库复制写命令的进度信息（slave_repl_offset），如果某个从库的进度差值大于预设的阈值，可以让客户端不再和这个从库连接进行数据读取，这样就可以减少读到不一致数据的情况
 
-[![rHfj0g.png](https://s3.ax1x.com/2020/12/29/rHfj0g.png)](https://imgchr.com/i/rHfj0g)
+![](../../Picture/Database/Redis/masterslave/06.png)
 
 ## 从数据库读取过期数据
 
@@ -92,7 +92,7 @@ Redis 同时使用了两种策略来删除过期的数据，分别是惰性删�
 
 同时，Redis 用于设置过期时间的命令在从库上可能会被延后，导致应该过期的数据又在从库上被读取到；设置数据过期时间的命令一共有 4 个，EXPIRE 和 PEXPIRE 给数据设置的是从命令执行时开始计算的存活时间，EXPIREAT 和 PEXPIREAT 会直接把数据的过期时间设置为具体的一个时间点
 
-[![rHTuyq.png](https://s3.ax1x.com/2020/12/29/rHTuyq.png)](https://imgchr.com/i/rHTuyq)
+![](../../Picture/Database/Redis/masterslave/07.png)
 
 当主从库全量同步时，如果主库接收到了一条 EXPIRE 命令，那么，主库会直接执行这条命令。这条命令会在全量同步完成后，发给从库执行。而从库在执行时，就会在当前时间的基础上加上数据的存活时间，这样一来，从库上数据的过期时间就会比主库上延后了
 

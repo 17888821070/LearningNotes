@@ -2,7 +2,7 @@
 
 ## Redis 与普通 KV 数据库对比
 
-[![DN5o4K.png](https://s3.ax1x.com/2020/11/24/DN5o4K.png)](https://imgchr.com/i/DN5o4K)
+![](../../Picture/Database/Redis/conclusion/01.png)
 
 ## rehash
 
@@ -38,7 +38,7 @@ Redis 会执行定时任务，定时任务中就包含了 rehash 操作；在 re
 
 bgsave 子进程复制主线程的页表以后，假如主线程需要修改虚页 7 里的数据，那么，主线程就需要新分配一个物理页（假设是物理页 53），然后把修改后的虚页 7 里的数据写到物理页 53 上，而虚页 7 里原来的数据仍然保存在物理页 33 上。这个时候，虚页 7 到物理页 33 的映射关系，仍然保留在 bgsave 子进程中。所以，bgsave 子进程可以无误地把虚页 7 的原始数据写入 RDB 文件
 
-[![DUpwzd.png](https://s3.ax1x.com/2020/11/24/DUpwzd.png)](https://imgchr.com/i/DUpwzd)
+![](../../Picture/Database/Redis/conclusion/02.png)
 
 ## Redis 基本 IO 模型中潜在的性能瓶颈
 
@@ -68,7 +68,7 @@ Redis 主从库在进行复制时，当主库要把全量复制期间的写操�
 
 repl_backlog_buffer 是一块专用 buffer，在 Redis 服务器启动后，开始一直接收写操作命令，这是所有从库共享的。主库和从库会各自记录自己的复制进度，所以，不同的从库在进行恢复时，会把自己的复制进度（slave_repl_offset）发给主库，主库就可以和它独立同步
 
-[![DU9LHP.png](https://s3.ax1x.com/2020/11/24/DU9LHP.png)](https://imgchr.com/i/DU9LHP)
+![](../../Picture/Database/Redis/conclusion/03.png)
 
 ## 主从切换时的请求操作
 

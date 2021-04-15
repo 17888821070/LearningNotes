@@ -3,11 +3,11 @@
 ## 树
 树的每个元素叫做节点，用来连线相领节点之间的关系叫做父子关系
 
-![此处输入图片的描述][1]
+![](../Picture/DataStruct/binarytree/01.jpg)
 
 A 是 B 的父节点，B 是 A 的子节点，B、C、D 是兄弟节点，没有父节点的节点为根节点，没有子节点的节点为叶节点
 
-![此处输入图片的描述][2]
+![](../Picture/DataStruct/binarytree/02.jpg)
 
 节点的高度：节点到叶节点的最大路径（边数）
 
@@ -17,14 +17,12 @@ A 是 B 的父节点，B 是 A 的子节点，B、C、D 是兄弟节点，没有
 
 树的高度：根节点的高度
 
-![此处输入图片的描述][3]
-
-
+![](../Picture/DataStruct/binarytree/03.jpg)
 
 ## 二叉树
 每个节点最多有两个叉，即两个子节点，分别是左子节点和右子节点；并不要求每个节点都有两个子节点，有的子节点只有左节点，有的只有右节点
 
-![此处输入图片的描述][4]
+![](../Picture/DataStruct/binarytree/04.jpg)
 
 编号 2 的二叉树，叶节点全部在最底层，除了叶节点之外，每个节点都有左右两个子节点，为满二叉树
 
@@ -37,18 +35,18 @@ A 是 B 的父节点，B 是 A 的子节点，B、C、D 是兄弟节点，没有
 ### 链式存储法
 每个节点有三个字段，一个存储数据，另外两个指向左右节点的指针
 
- ![此处输入图片的描述][5]
+![](../Picture/DataStruct/binarytree/05.jpg)
 
 ### 顺序存储法：
 
 把根节点存储在下标 `i = 1` 的位置，左子节点存储在 `2 * i = 2` 的位置，右子节点存储在 `2 * i + 1 = 3` 的位置
 如果节点 X 存储在数组中下标 i 的位置，它的右节点存储在 2 * i 的位置，左节点存储在 2 * i + 1 的位置；反之，下标 i / 2 的位置是它的父节点
 
-![此处输入图片的描述][6]
+![](../Picture/DataStruct/binarytree/06.jpg)
 
 完全二叉树的顺序存储法，只会浪费一个下标0的存储位置；如果是非完全二叉树，会浪费比较多的存储空间
 
-![此处输入图片的描述][7]
+![](../Picture/DataStruct/binarytree/07.jpg)
 
 完全二叉树用数组存储是最节省空间的一种方式，它不需要额外的左右子节点的指针，也没有浪费多余的存储空间
 
@@ -150,12 +148,13 @@ while (!sta.empty())
 
 二叉查找树：在树的任意一个节点，其左子树中的每个节点的值都小于这个节点的值，右子树节点的值都大于这个节点
 
-![此处输入图片的描述][8]
+![](../Picture/DataStruct/binarytree/08.jpg)
 
 ### 查找操作
 先取根节点，如果等于要查找的数据就返回；如果要查找的数据比根节点的值小，就去左子树中递归查找；如果要查找数据比根节点值大，就去右子树中递归查找
 
-![此处输入图片的描述][9]
+![](../Picture/DataStruct/binarytree/09.jpg)
+
 ```cpp
 struct Node
 {
@@ -199,7 +198,7 @@ public:
 ###  插入操作
 新插入的数据一般都是在叶子节点上，所以只需要从根节点开始，依次比较要插入的数据和节点的大小关系；如果要插入的数据比节点的数据大，并且节点的右子树为空就将新数据插入到右子节点的位置，如果不为空就继续遍历树
 
-![此处输入图片的描述][10]
+![](../Picture/DataStruct/binarytree/10.jpg)
 
 ```cpp
 void insert(int data)
@@ -243,9 +242,9 @@ void insert(int data)
 
 第三种情况：要删除的节点有两个子节点，需要找到这个节点的右子树中最小的子节点，把它替换到要删除的节点然后删除这个最小节点
 
-![此处输入图片的描述][11]
+![](../Picture/DataStruct/binarytree/11.jpg)
 
- ```cpp
+```cpp
 void delete(int data)
 {
     Node * p = root_; // p 指向要删除的节点，初始化指向根节点
@@ -318,10 +317,9 @@ void bfs_rec()
 
 一个节点存储相同的键值：第一种方法通过链表和支持动态扩容的数组等数据结构，把值相同的数据存储在同一个节点上；第二种方法每个节点仍然存储一个数据，在插入过程中遇到值相同的节点，把新插入的数据当做大于这个节点值来处理，查找数据的时候，遇到值相同的节点，并不停止查找操作而是继续在右子树中查找直到叶子节点，对于删除操作，先查找到所有要删除的节点，然后再删除
 
-![此处输入图片的描述][12]
+![](../Picture/DataStruct/binarytree/12.jpg)
 
-![此处输入图片的描述][13]
-
+![](../Picture/DataStruct/binarytree/13.jpg)
 
 ## 时间复杂度分析
 根节点的左右子树极度不平衡，退化成了链表所以查找的时间复杂度成了 O(n)
@@ -404,7 +402,7 @@ public:
 
 对于数组 [2, 5, 1, 4, 9, 3]，节点存储区间内最小值
 
-![8B6i5V.png](https://s1.ax1x.com/2020/03/18/8B6i5V.png)
+![](../Picture/DataStruct/binarytree/14.png)
 
 ## 二叉树的序列化与反序列化
 
@@ -489,17 +487,3 @@ func solve(p, q)
     c2 = solve(p.child, q.child)
     return g(c1, c2, p, q)
 ```
-
-  [1]: https://static001.geekbang.org/resource/image/b7/29/b7043bf29a253bb36221eaec62b2e129.jpg
-  [2]: https://static001.geekbang.org/resource/image/22/ae/220043e683ea33b9912425ef759556ae.jpg
-  [3]: https://static001.geekbang.org/resource/image/22/ae/220043e683ea33b9912425ef759556ae.jpg
-  [4]: https://static001.geekbang.org/resource/image/09/2b/09c2972d56eb0cf67e727deda0e9412b.jpg
-  [5]: https://static001.geekbang.org/resource/image/12/8e/12cd11b2432ed7c4dfc9a2053cb70b8e.jpg
-  [6]: https://static001.geekbang.org/resource/image/14/30/14eaa820cb89a17a7303e8847a412330.jpg
-  [7]: https://static001.geekbang.org/resource/image/08/23/08bd43991561ceeb76679fbb77071223.jpg
-  [8]: https://static001.geekbang.org/resource/image/f3/ae/f3bb11b6d4a18f95aa19e11f22b99bae.jpg
-  [9]: https://static001.geekbang.org/resource/image/96/2a/96b3d86ed9b7c4f399e8357ceed0db2a.jpg
-  [10]: https://static001.geekbang.org/resource/image/da/c5/daa9fb557726ee6183c5b80222cfc5c5.jpg
-  [11]: https://static001.geekbang.org/resource/image/29/2c/299c615bc2e00dc32225f4d9e3490e2c.jpg
-  [12]: https://static001.geekbang.org/resource/image/3f/5f/3f59a40e3d927f567022918d89590a5f.jpg
-  [13]: https://static001.geekbang.org/resource/image/fb/ff/fb7b320efd59a05469d6d6fcf0c98eff.jpg

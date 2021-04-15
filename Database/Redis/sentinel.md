@@ -30,7 +30,7 @@
 
 只有大多数的哨兵实例都判断主库已经主观下线了，主库才会被标记为客观下线
 
-[![DnWNTK.png](https://s3.ax1x.com/2020/11/18/DnWNTK.png)](https://imgchr.com/i/DnWNTK)
+![](../../Picture/Database/Redis/sentinel/01.png)
 
 客观下线的标准就是，当有 N 个哨兵实例时，最好要有 N/2 + 1 个实例判断主库为主观下线，才能最终判定主库为客观下线。这样一来，就可以减少误判的概率，也能避免误判带来的无谓的主从库切换
 
@@ -38,7 +38,7 @@
 
 哨兵选择新主库的过程为筛选 + 打分。简单来说，在多个从库中，先按照一定的筛选条件，把不符合条件的从库去掉。然后，再按照一定的规则，给剩下的从库逐个打分，将得分最高的从库选为新主库
 
-[![DnW7mq.png](https://s3.ax1x.com/2020/11/18/DnW7mq.png)](https://imgchr.com/i/DnW7mq)
+![](../../Picture/Database/Redis/sentinel/02.png)
 
 ### 筛选
 

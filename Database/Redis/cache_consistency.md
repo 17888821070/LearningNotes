@@ -34,9 +34,9 @@
 
 先完成了数据库的更新，但是在删除缓存时失败，那么数据库中的值是新值，而缓存中的是旧值，这肯定是不一致的。这个时候，如果有其他的并发请求来访问数据，按照正常的缓存访问流程，就会先在缓存中查询，但此时就会读到旧值了
 
-[![rmtE60.png](https://s3.ax1x.com/2020/12/13/rmtE60.png)](https://imgchr.com/i/rmtE60)
+![](../../Picture/Database/Redis/consistency/01.png)
 
-[![rmUZoF.png](https://s3.ax1x.com/2020/12/13/rmUZoF.png)](https://imgchr.com/i/rmUZoF)
+![](../../Picture/Database/Redis/consistency/02.png)
 
 ## 重试机制
 
@@ -54,7 +54,7 @@
 
 等到线程 B 从数据库读取完数据、更新了缓存后，线程 A 才开始更新数据库，此时，缓存中的数据是旧值，而数据库中的是最新值，两者就不一致了
 
-[![rmNTGd.png](https://s3.ax1x.com/2020/12/13/rmNTGd.png)](https://imgchr.com/i/rmNTGd)
+![](../../Picture/Database/Redis/consistency/03.png)
 
 解决方案：在线程 A 更新完数据库值以后，我们可以让它先 sleep 一小段时间，再进行一次缓存删除操作；线程 A sleep 的时间需要大于线程 B 读取数据再写入缓存的时间；其它线程读取数据时，会发现缓存缺失，所以会从数据库中读取最新值
 
@@ -64,4 +64,4 @@
 
 线程 A 删除了数据库中的值，但还没来得及删除缓存值，线程 B 就开始读取数据；线程 B 查询缓存时，发现缓存命中，就会直接从缓存中读取旧值
 
-[![rmUiMq.png](https://s3.ax1x.com/2020/12/13/rmUiMq.png)](https://imgchr.com/i/rmUiMq)
+![](../../Picture/Database/Redis/consistency/04.png)

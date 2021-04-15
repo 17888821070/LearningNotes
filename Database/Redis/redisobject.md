@@ -16,7 +16,7 @@ Redis 键值对中的每一个值都是用 RedisObject 保存的
 
 - *ptr：是指向数据的指针
 
-[![DshPk4.png](https://s3.ax1x.com/2020/11/28/DshPk4.png)](https://imgchr.com/i/DshPk4)
+![](../../Picture/Database/Redis/redisobject/01.png)
 
 ## 定义新数据
 

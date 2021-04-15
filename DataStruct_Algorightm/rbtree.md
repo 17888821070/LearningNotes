@@ -27,7 +27,7 @@
 
 右旋：围绕某个节点的右旋
 
-![此处输入图片的描述][1]
+![](../Picture/DataStruct/rbtree/01.jpg)
 
 ### 插入操作的平衡调整
 规定：插入的节点必须是红色的，而且二叉树中新插入的节点都是放在叶子节点上
@@ -46,21 +46,20 @@
 2. 关注节点的祖父节点 c 设置成红色
 3. 关注节点变成祖父节点 c
 
-![此处输入图片的描述][2]
+![](../Picture/DataStruct/rbtree/02.jpg)
 
 情况2：关注节点 a 的叔叔节点 d 是黑色，a 是父节点 b 的右子节点
 1. 关注节点变成父节点 b
 2. 围绕关注节点 b 左旋
 3. 调到情况 3
 
-![此处输入图片的描述][3]
+![](../Picture/DataStruct/rbtree/03.jpg)
 
 情况3：关注节点 a 的叔叔节点 d 是黑色，a 是父节点 b 的左子节点
 1. 围绕 a 的祖父节点 c 右旋
 2. 将 a 的父节点 b、兄弟节点 c 的颜色互换
 
-![此处输入图片的描述][4]
-
+![](../Picture/DataStruct/rbtree/04.jpg)
 
 ### 删除操作的平衡调整
 第一步是针对删除节点初步调整，只是保证整颗红黑树在一个节点删除之后，每个节点达到其可达叶子节点的所有路径包含相同数目的黑色节点
@@ -69,14 +68,3 @@
 
 初步调整
 情况一：
-
-
-
-
-
-
-
-  [1]: https://static001.geekbang.org/resource/image/0e/1e/0e37e597737012593a93105ebbf4591e.jpg
-  [2]: https://static001.geekbang.org/resource/image/60/40/603cf91f54b5db21bd02c6c5678ecf40.jpg
-  [3]: https://static001.geekbang.org/resource/image/44/ad/4480a314f9d83c343b8adbb28b6782ad.jpg
-  [4]: https://static001.geekbang.org/resource/image/04/12/04650d9470b1e67899f5b8b7b8e33212.jpg

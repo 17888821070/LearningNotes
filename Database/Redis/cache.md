@@ -44,7 +44,7 @@
 
 - 异步写回：所有写请求都先在缓存中处理，等到这些增改的数据要被从缓存中淘汰出来时，缓存将它们写回后端数据库
 
-[![DvMern.png](https://s3.ax1x.com/2020/12/07/DvMern.png)](https://imgchr.com/i/DvMern)
+![](../../Picture/Database/Redis/cache/01.png)
 
 只读缓存和使用直写策略的读写缓存都会把数据同步写到后端数据库中，它们的区别在于：
 

@@ -1,6 +1,6 @@
 # 基础架构
 
-[![sYb181.png](https://s3.ax1x.com/2021/01/12/sYb181.png)](https://imgchr.com/i/sYb181)
+![](../../Picture/Database/MySQL/infrastructure/01.png)
 
 MySQL 可以分为 Server 层和存储引擎层两部分
 

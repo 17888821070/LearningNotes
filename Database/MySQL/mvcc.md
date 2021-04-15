@@ -34,11 +34,11 @@ MySQL 会为每一行真实数据记录添加两三个隐藏的字段，分别�
 
 - roll_pointer：必需隐藏字段；回滚指针，指向这行数据上一个版本在 Undo log 的地址
 
-![wSwOxO.png](https://s1.ax1x.com/2020/09/02/wSwOxO.png)
+![](../../Picture/Database/MySQL/mvcc/01.png)
 
 对于事务 id，只有执行 insert/update/delete 才会产生事务 id，只执行 select 则没有事务 id
 
-![wS0lWV.png](https://s1.ax1x.com/2020/09/02/wS0lWV.png)
+![](../../Picture/Database/MySQL/mvcc/02.png)
 
 ## ReadView 
 
@@ -98,7 +98,7 @@ CREATE TABLE `t` (
 insert into t(id, k) values(1,1),(2,2);
 ```
 
-[![sRM2fU.png](https://s3.ax1x.com/2021/01/20/sRM2fU.png)](https://imgchr.com/i/sRM2fU)
+![](../../Picture/Database/MySQL/mvcc/03.png)
 
 ### 事务启动时机
 
@@ -128,7 +128,7 @@ insert into t(id, k) values(1,1),(2,2);
 
 事务 A 的 m_ids 是[99,100]，事务 B 的 m_ids 是[99,100,101], 事务 C 的 m_ids 是[99,100,101,102]
 
-[![sRQCAP.png](https://s3.ax1x.com/2021/01/20/sRQCAP.png)](https://imgchr.com/i/sRQCAP)
+![](../../Picture/Database/MySQL/mvcc/04.png)
 
 第一个有效更新是事务 C，把数据从 (1,1) 改成了 (1,2)。这时候这个数据的最新版本的 transaction_id 是 102，而 90 这个版本已经成为了历史版本
 
@@ -152,7 +152,7 @@ insert into t(id, k) values(1,1),(2,2);
 
 假设事务 C 不是马上提交的，而是变成了下面的事务 C'
 
-[![sRQw4K.png](https://s3.ax1x.com/2021/01/20/sRQw4K.png)](https://imgchr.com/i/sRQw4K)
+![](../../Picture/Database/MySQL/mvcc/05.png)
 
 事务 C' 的不同是，更新后并没有马上提交，在它提交前，事务 B 的更新语句先发起了
 
@@ -160,4 +160,4 @@ insert into t(id, k) values(1,1),(2,2);
 
 事务 C' 没提交，也就是说 (1,2) 这个版本上的写锁还没释放。而事务 B 是当前读，必须要读最新版本，而且必须加锁，因此就被锁住了，必须等到事务 C' 释放这个锁，才能继续它的当前读
 
-[![sRQD3D.png](https://s3.ax1x.com/2021/01/20/sRQD3D.png)](https://imgchr.com/i/sRQD3D)
+![](../../Picture/Database/MySQL/mvcc/06.png)

@@ -20,7 +20,7 @@ Redis 本身可以被多个客户端共享访问，正好就是一个共享存�
 
 赋予锁变量一个变量名，把这个变量名作为键值对的键，而锁变量的值，则是键值对的值，这样一来，Redis 就能保存锁变量了，客户端也就可以通过 Redis 的命令操作来实现锁操作
 
-[![r7edgA.png](https://s3.ax1x.com/2020/12/28/r7edgA.png)](https://imgchr.com/i/r7edgA)
+![](../../Picture/Database/Redis/distributedlock/01.png)
 
 可以用 SETNX 和 DEL 命令组合来实现加锁和释放锁操作
 

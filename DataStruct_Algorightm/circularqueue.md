@@ -4,7 +4,7 @@
 
 使用两个参数：front、rear，front 代表的是队列第一个元素的下标，而 rear 代表的是队列最后一个有效元素的下一个元素的下标
 
-![0AVMSx.png](https://s1.ax1x.com/2020/09/27/0AVMSx.png)
+![0AVMSx.png](../Picture/DataStruct/circularqueue/01.png)
 
 入队算法：rear = (rear + 1) % 数组长度
 

@@ -4,7 +4,7 @@
 
 切片集群，也叫分片集群，就是指启动多个 Redis 实例组成一个集群，然后按照一定的规则，把收到的数据划分成多份，每一份用一个实例来保存
 
-[![DtNaRg.png](https://s3.ax1x.com/2020/11/24/DtNaRg.png)](https://imgchr.com/i/DtNaRg)
+![](../../Picture/Database/Redis/slicecluster/01.png)
 
 ## 保存大量数据方式
 
@@ -52,10 +52,10 @@ Redis 实例会把自己的哈希槽信息发给和它相连接的其它实例�
 
 Redis Cluster 方案提供了一种重定向机制：客户端给一个实例发送数据读写操作时，这个实例上并没有相应的数据，客户端要再给一个新实例发送操作命令；当客户端把一个键值对的操作请求发给一个实例时，如果这个实例上并没有这个键值对映射的哈希槽，那么，这个实例就会给客户端返回下面的 MOVED 命令响应结果，这个结果中就包含了新实例的访问地址
 
-[![DtfRMR.png](https://s3.ax1x.com/2020/11/24/DtfRMR.png)](https://imgchr.com/i/DtfRMR)
+![](../../Picture/Database/Redis/slicecluster/02.png)
 
 当实例重新分配过程中，槽的一部分数据还未转移成功，此时客户端请求会收到一条 ASK 报错信息，表示客户端请求的键值对所在的哈希槽正在迁移，客户端需要先给新实例发送一个 ASKING 命令，让这个实例允许执行客户端接下来发送的命令。然后，客户端再向这个实例发送 GET 命令，以读取数据
 
-[![DthPzj.png](https://s3.ax1x.com/2020/11/24/DthPzj.png)](https://imgchr.com/i/DthPzj)
+![](../../Picture/Database/Redis/slicecluster/03.png)
 
 和 MOVED 命令不同，ASK 命令并不会更新客户端缓存的哈希槽分配信息

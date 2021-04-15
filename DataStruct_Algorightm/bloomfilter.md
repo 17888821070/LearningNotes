@@ -8,7 +8,7 @@
 
 布隆过滤器（Bloom Filter）本质上是由长度为 m 的位向量或位列表（仅包含 0 或 1 位值的列表）组成，最初所有的值均设置为 0
 
-![0ePKOO.png](https://s1.ax1x.com/2020/09/29/0ePKOO.png)
+![](../Picture/DataStruct/bloom/01.png)
 
 提供 K 个不同的哈希函数，并将结果位置上对应位的值置为 1，使用多个哈希函数产生多个索引值
 

@@ -6,7 +6,7 @@
 
 一个哈希表，其实就是一个数组，数组的每个元素称为一个哈希桶，每个哈希桶中保存了键值对数据；哈希桶中的元素保存的并不是值本身，而是指向具体值的指针；哈希桶中的 entry 元素中保存了 *key 和 *value 指针，分别指向了实际的键和值，这样一来，即使值是一个集合，也可以通过 *value 指针被查找到
 
-[![BIue8P.png](https://s1.ax1x.com/2020/11/07/BIue8P.png)](https://imgchr.com/i/BIue8P)
+![](../../Picture/Database/Redis/datastruct/01.png)
 
 使用哈希表可以很快查找键值对，但哈希表的冲突问题和 rehash 可能带来的操作阻塞
 
@@ -16,7 +16,7 @@
 
 Redis 使用开链的方式解决哈希冲突，同一个哈希桶中的多个元素用一个链表来保存，它们之间依次用指针连接
 
-[![BIuDa9.png](https://s1.ax1x.com/2020/11/07/BIuDa9.png)](https://imgchr.com/i/BIuDa9)
+![](../../Picture/Database/Redis/datastruct/02.png)
 
 ### rehash
 
@@ -36,9 +36,9 @@ Redis 会对哈希表做 rehash 操作，rehash 也就是增加现有的哈希�
 
 在第二步拷贝数据时，Redis 仍然正常处理客户端请求，每处理一个请求时，从哈希表 1 中的第一个索引位置开始，顺带着将这个索引位置上的所有 entries 拷贝到哈希表 2 中；等处理下一个请求时，再顺带拷贝哈希表 1 中的下一个索引位置的 entries；把一次性大量拷贝的开销，分摊到了多次处理请求的过程中，避免了耗时操作，保证了数据的快速访问
 
-[![BIKomF.png](https://s1.ax1x.com/2020/11/07/BIKomF.png)](https://imgchr.com/i/BIKomF)
+![](../../Picture/Database/Redis/datastruct/03.png)
 
-[![Dasy5Q.png](https://s3.ax1x.com/2020/11/25/Dasy5Q.png)](https://imgchr.com/i/Dasy5Q)
+![](../../Picture/Database/Redis/datastruct/04.png)
 
 ## 内存分配
 
@@ -54,7 +54,7 @@ dictEntry 结构就占用了 32 字节
 
 一个 RedisObject 包含了 8 字节的元数据和一个 8 字节指针，这个指针再进一步指向具体数据类型的实际数据所在，例如指向 String 类型的 SDS 结构所在的内存地址
 
-[![DUiCT0.png](https://s3.ax1x.com/2020/11/24/DUiCT0.png)](https://imgchr.com/i/DUiCT0)
+![](../../Picture/Database/Redis/datastruct/05.png)
 
 ## 基本数据结构
 
@@ -62,13 +62,13 @@ Redis 的 value 支持的数据结构为：String、List、Hash、Set、Sorted S
 
 底层数据结构一共有 6 种，分别是简单动态字符串、双向链表、压缩列表、哈希表、跳表和整数数组
 
-[![BImoeH.png](https://s1.ax1x.com/2020/11/07/BImoeH.png)](https://imgchr.com/i/BImoeH)
+![](../../Picture/Database/Redis/datastruct/06.png)
 
 String 类型的底层实现只有一种数据结构，也就是简单动态字符串
 
 List、Hash、Set 和 Sorted Set 这四种数据类型，都有两种底层实现结构，这四种类型为集合类型，特点是一个键对应一个集合的数据
 
-[![DdYG0s.png](https://s3.ax1x.com/2020/11/25/DdYG0s.png)](https://imgchr.com/i/DdYG0s)
+![](../../Picture/Database/Redis/datastruct/07.png)
 
 ## SDS
 
@@ -78,7 +78,7 @@ List、Hash、Set 和 Sorted Set 这四种数据类型，都有两种底层实�
 
 当你保存的数据中包含字符时，String 类型就会用简单动态字符串（Simple Dynamic String，SDS）结构体来保存
 
-[![DUCXrR.png](https://s3.ax1x.com/2020/11/24/DUCXrR.png)](https://imgchr.com/i/DUCXrR)
+![](../../Picture/Database/Redis/datastruct/08.png)
 
 buf：字节数组，保存实际数据。为了表示字节数组的结束，Redis 会自动在数组最后加一个 `\0`，这会额外占用 1 个字节的开销
 
@@ -92,7 +92,7 @@ alloc：也占个 4 字节，表示 buf 的实际分配长度，一般大于 len
 
 当字符串大于 44 字节时，SDS 的数据量就开始变多了，Redis 就不再把 SDS 和 RedisObject 布局在一起了，而是会给 SDS 分配独立的空间，并用指针指向 SDS 结构，布局方式为 raw 编码
 
-[![DUiKTx.png](https://s3.ax1x.com/2020/11/24/DUiKTx.png)](https://imgchr.com/i/DUiKTx)
+![](../../Picture/Database/Redis/datastruct/09.png)
 
 ## ziplist
 
@@ -100,7 +100,7 @@ alloc：也占个 4 字节，表示 buf 的实际分配长度，一般大于 len
 
 类似于一个数组，数组中的每一个元素都对应保存一个数据；和数组不同的是，压缩列表在表头有三个字段 zlbytes、zltail 和 zllen，分别表示列表长度、列表尾的偏移量和列表中的 entry 个数；压缩列表在表尾还有一个 zlend，表示列表结束
 
-[![BTXplt.png](https://s1.ax1x.com/2020/11/09/BTXplt.png)](https://imgchr.com/i/BTXplt)
+![](../../Picture/Database/Redis/datastruct/10.png)
 
 在压缩列表中，如果我们要查找定位第一个元素和最后一个元素，可以通过表头三个字段的长度直接定位，复杂度是 O(1)。而查找其他元素时，就没有这么高效了，只能逐个查找，此时的复杂度就是 O(N) 了
 
@@ -115,7 +115,7 @@ zlend|uint8_t|255 的二进制值 1111 1111 （UINT8_MAX） ，用于标记 zipl
 
 压缩列表之所以能节省内存，就在于它是用一系列连续的 entry 保存数据
 
-[![DdA8c8.png](https://s3.ax1x.com/2020/11/25/DdA8c8.png)](https://imgchr.com/i/DdA8c8)
+![](../../Picture/Database/Redis/datastruct/11.png)
 
 - prev_len，表示前一个 entry 的长度。prev_len 有两种取值情况：1 字节或 5 字节。取值 1 字节时，表示上一个 entry 的长度小于 254 字节。虽然 1 字节的值能表示的数值范围是 0 到 255，但是压缩列表中 zlend 的取值默认是 255，因此，就默认用 255 表示整个压缩列表的结束，其他表示长度的地方就不能再用 255 这个值了。所以，当上一个 entry 长度小于 254 字节时，prev_len 取值为 1 字节，否则，就取值为 5 字节
 
@@ -137,4 +137,4 @@ Redis 基于压缩列表实现了 List、Hash 和 Sorted Set 这样的集合类�
 
 在链表的基础上，增加了多级索引，通过索引位置的几个跳转，实现数据的快速定位
 
-[![BTv7yq.png](https://s1.ax1x.com/2020/11/09/BTv7yq.png)](https://imgchr.com/i/BTv7yq)
+![](../../Picture/Database/Redis/datastruct/12.png)

@@ -10,7 +10,7 @@ AOF 里记录的是 Redis 收到的每一条命令，这些命令是以文本形
 
 以 Redis 收到 set testkey testvalue 命令后记录的日志为例，看看 AOF 日志的内容。其中，*3 表示当前命令有三个部分，每部分都是由 $+数字 开头，后面紧跟着具体的命令、键或值。数字表示这部分中的命令、键或值一共有多少字节。例如，$3 set 表示这部分有 3 个字节，也就是 set 命令
 
-[![B7VGNR.png](https://s1.ax1x.com/2020/11/09/B7VGNR.png)](https://imgchr.com/i/B7VGNR)
+![](../../Picture/Database/Redis/persistence/01.png)
 
 ### 写后日志原因
 
@@ -38,7 +38,7 @@ AOF 配置项 appendfsync 的三个可选值提供了三个选择
 
 - No，操作系统控制的写回：每个写命令执行完，只是先把日志写到 AOF 文件的内存缓冲区，由操作系统决定何时将缓冲区内容写回磁盘；落盘的时机已经不在 Redis 手中了，只要 AOF 记录没有写回磁盘，一旦宕机对应的数据就丢失了
 
-[![B7Z3M8.png](https://s1.ax1x.com/2020/11/09/B7Z3M8.png)](https://imgchr.com/i/B7Z3M8)
+![](../../Picture/Database/Redis/persistence/02.png)
 
 ### 重写机制
 
@@ -102,7 +102,7 @@ bgsave 借助 COW，在执行快照的同时，正常处理写操作；bgsave �
 
 增量快照，即做了一次全量快照后，后续的快照只对修改的数据进行快照记录，这样可以避免每次全量快照的开销
 
-[![B77Sv8.png](https://s1.ax1x.com/2020/11/09/B77Sv8.png)](https://imgchr.com/i/B77Sv8)
+![](../../Picture/Database/Redis/persistence/03.png)
 
 记住哪些数据被修改了需要使用额外的元数据信息去记录哪些数据被修改了，这会带来额外的空间开销问题
 
@@ -112,4 +112,4 @@ bgsave 借助 COW，在执行快照的同时，正常处理写操作；bgsave �
 
 RDB 快照不用很频繁地执行，这就避免了频繁 fork 对主线程的影响。而且，AOF 日志也只用记录两次快照间的操作，不需要记录所有操作。因此，就不会出现文件过大的情况了，也可以避免重写开销
 
-[![B77Y26.png](https://s1.ax1x.com/2020/11/09/B77Y26.png)](https://imgchr.com/i/B77Y26)
+![](../../Picture/Database/Redis/persistence/04.png)

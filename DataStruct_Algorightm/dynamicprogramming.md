@@ -32,7 +32,7 @@ int main()
 }
 ```
 
-![](https://static001.geekbang.org/resource/image/42/ea/42ca6cec4ad034fc3e5c0605fbacecea.jpg)
+![](../Picture/DataStruct/dp/01.jpg)
 
 递归树中的每个节点表示一种状态，用 (i, cw) 表示
 从递归树中可以发现有些子问题是重复的，比如 f(2, 2) 和 f(3, 4) 都被重复计算了两次，通过记录 f(i, cw) 的值避免冗余计算
@@ -125,8 +125,9 @@ int knapsack(bool ** states, int n, int w)
 }
 ```
 
-![](https://static001.geekbang.org/resource/image/aa/b5/aaf51df520ea6b8056f4e62aed81a5b5.jpg)
-![](https://static001.geekbang.org/resource/image/bb/7e/bbbb934247219db8299bd46dba9dd47e.jpg)
+![](../Picture/DataStruct/dp/02.jpg)
+
+![](../Picture/DataStruct/dp/03.jpg)
 
 动态规划思想：把问题分解为多个阶段，每个阶段对应一个决策，记录每一个阶段可达的状态集合（去掉重复的），然后通过当前阶段的状态集合去推导下一个阶段的状态集合，动态地往前推进
 
@@ -198,7 +199,7 @@ int main()
 }
 ```
 
-![](https://static001.geekbang.org/resource/image/bf/3f/bf0aa18f367db1b8dfd392906cb5693f.jpg)
+![](../Picture/DataStruct/dp/04.jpg)
 
 对于 f(2, 2, 4) 和 f(2, 2, 3)，在背包物品重量一样的情况下 f(2, 2, 4) 的物品总价值更大，故可以舍弃 f(2, 2, 3)，只需要沿着 f(2, 2, 4) 的决策路线继续往下决策
 
@@ -295,7 +296,7 @@ bool * knapsack(int ** states, int n, int w)
 
 假设有个 n * n 的矩阵 w[n][n]，矩阵存储的都是正整数，棋子从起始位置运动到终止位置，每次只能向下移动一格或向右移动一格，把经过的格子的数字加起来作为路径的长度，求最短路径
 
-![](https://static001.geekbang.org/resource/image/65/9f/652dff86c5dcc6a0e2a0de9a814b079f.jpg)
+![](../Picture/DataStruct/dp/05.jpg)
 
 - 一个模型：从 (0, 0) 到 (n - 1, n - 1) 总共要走 2 * (n - 1) 步，也就对应了 2 * (n - 1) 个阶段，并且每个阶段对应一个状态集合；状态定义为 min_dist(i, j)，i 表示行，j 表示列，min_dist(i, j) 的值表示从 (0, 0) 到 (i, j) 的最短路径长度
 
@@ -338,14 +339,15 @@ void minDist(int i, int j, int dist)
 }
 ```
 
-![](https://static001.geekbang.org/resource/image/2c/e2/2c3ec820fa8f8cc7df838c0304b030e2.jpg)
+![](../Picture/DataStruct/dp/06.jpg)
 
 虽然递归树中没有重复的 (i, j, dist), 但 (i, j) 有重复的，对于重复的 (i, j) 只保存 dist 最小的
 
 画出二维状态表，行、列表示棋子所在的位置，值表示最短路径
 
-![](https://static001.geekbang.org/resource/image/b3/ca/b3f0de1c81533a0d24c43426eaf09aca.jpg)
-![](https://static001.geekbang.org/resource/image/05/7d/05a48baf7fb4d251bf5078840079107d.jpg)
+![](../Picture/DataStruct/dp/07.jpg)
+
+![](../Picture/DataStruct/dp/08.jpg)
 
 根据填表过程，翻译成代码
 

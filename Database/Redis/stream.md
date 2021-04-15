@@ -4,7 +4,7 @@
 
 在分布式系统中，当两个组件要基于消息队列进行通信时，一个组件会把要处理的数据以消息的形式传递给消息队列，然后这个组件就可以继续执行其他操作了；远端的另一个组件从消息队列中把消息读取出来，再在本地进行处理
 
-[![Do7umq.png](https://s3.ax1x.com/2020/12/03/Do7umq.png)](https://imgchr.com/i/Do7umq)
+![](../../Picture/Database/Redis/stream/01.png)
 
 在使用消息队列时，消费者可以异步读取生产者消息，然后再进行处理。这样一来，即使生产者发送消息的速度远远超过了消费者处理消息的速度，生产者已经发送的消息也可以缓存在消息队列中，避免阻塞生产者
 
@@ -60,7 +60,7 @@ Stream 是一个序列，使用XADD向其中添加的消息不会被自动删除
 
 ### 基本结构
 
-[![DTrvjg.png](https://s3.ax1x.com/2020/12/03/DTrvjg.png)](https://imgchr.com/i/DTrvjg)
+![](../../Picture/Database/Redis/stream/02.png)
 
 - Consumer Group：消费者组可以看成 Stream 的一种数据结构；消费者可以使用 XREAD 单独消费，也可以多个消费者加入一个消费者组进行组内消费；同一条消息只会被一个消费者消费
 
@@ -78,7 +78,7 @@ Stream 是一个序列，使用XADD向其中添加的消息不会被自动删除
 
 消费者组为需要多个消费者配合协作来消费同一个消息队列，就是消息队列中有 10 条消息，三个消费者分别消费其中的某些消息
 
-[![DTIE2d.png](https://s3.ax1x.com/2020/12/03/DTIE2d.png)](https://imgchr.com/i/DTIE2d)
+![](../../Picture/Database/Redis/stream/03.png)
 
 每个消费者组内可以挂多个消费者分担读取消息进行消费，消费完成后，各自向 Redis 发送 XACK，标记自己的消费组已经消费到了哪个位置，而且消费组之间互不影响
 

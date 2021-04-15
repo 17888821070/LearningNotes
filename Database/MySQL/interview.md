@@ -302,7 +302,7 @@ OLD 是只读的，而 NEW 则可以在触发器中使用 SET 赋值，这样不
 
 为了减轻数据库压力，需要对数据库做读写分离和主从同步，写操作走主库，读操作走从库，分散了数据库的访问压力，提升整个系统的性能和可用性
 
-![0NSOo9.png](https://s1.ax1x.com/2020/10/06/0NSOo9.png)
+![](../../Picture/Database/MySQL/interview/01.png)
 
 ### 主从复制原理
 
@@ -314,4 +314,4 @@ OLD 是只读的，而 NEW 则可以在触发器中使用 SET 赋值，这样不
 
 - slave 库 SQL 线程：该线程检测到 relay log 有更新后，会读取并在本地做 redo 操作，将发生在主库的事件在本地重新执行一遍，来保证主从数据同步；如果一个 relay log 文件中的全部事件都执行完毕，那么 SQL 线程会自动将该 relay log 文件删除掉
 
-![0NCUZF.png](https://s1.ax1x.com/2020/10/06/0NCUZF.png)
+![](../../Picture/Database/MySQL/interview/02.png)
