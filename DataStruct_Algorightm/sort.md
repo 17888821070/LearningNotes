@@ -36,28 +36,19 @@
 当某次冒泡操作没有进行数据交互时，说明已经排序完成了，可以不再继续冒泡操作了
 
 ```cpp
-    int a[10] = { 7,3,1,9,4,0,5,2,8,6 };
-
-    // 冒泡排序 从小到大
-    for (int i = 0; i < 10; i++)  // 循环次数，默认是 n 次
-    {
-        bool flag = false;
-        for (int j = 0; j < 10 - i - 1; j++)
-        {
-            if (a[j] > a[j+1])
-            {
-                int temp = a[j];
-                a[j] = a[j + 1];
-                a[j + 1] = temp;
-                flag = true;
-            }
-        }
-
-        if (!flag)
-        {
-            break;  // 该次冒泡操作没有进行操作，则认为排序完成，退出冒泡操作
-        }
-    }
+void bubblesort(vector<int>& v) {
+	int size = v.size();
+	for (int i = 1; i < size; ++i) {
+		bool flag = false;
+		for (int j = 0; j < size - i; ++j) {
+			if (v[j] > v[j + 1]) {
+				swap(v[j], v[j + 1]);
+				flag = true;
+			}
+		}
+		if (!flag) break;
+	}
+}
 ```
 
  - 冒泡排序只涉及相邻数据的交换操作，只需要常量级的临时空间，所以空间复杂度为 O(1)，故是原地排序
@@ -80,29 +71,18 @@
 插入排序包含两种操作，元素的比较和元素的移动；对于一个给定的初始序列，移动操作的次数总是固定的，即逆序度
   
 ```cpp
-    int a[10] = { 3,5,2,6,4,9,0,7,1,8 };
-
-    for (int i = 1; i < 10; i++)
-    {
-        int value = a[i];
-        int j = i - 1;
-        for( ; j >= 0 ; j--)
-        {
-            if (a[j] > value)  // a[j]跟value做比较
-            {
-                a[j + 1] = a[j];
-            }
-            else
-            {
-                break;   // 找到插入的位置
-            }
-        }
-        a[j + 1] = value;
-    }
-    for (int i = 0; i < 10; i++)
-    {
-        std::cout << a[i] << std::endl;
-    }
+void insertsort(vector<int>& v) {
+	int size = v.size();
+	for (int i = 1; i < size; ++i) {
+		int tmp = v[i];
+		for (int j = i - 1; j >= 0; --j) {
+			if (v[j + 1] < v[j]) {
+				swap(v[j + 1], v[j]);
+			}
+			else break;
+		}
+	}
+}
 ```
 
 - 插入排序是原地排序
@@ -117,22 +97,18 @@
 
 
 ```cpp
-    int a[10] = { 3,5,2,6,4,9,0,7,1,8 };
-
-    for (int i = 0; i < 10; i++)
-    {
-        int min_index = i;
-        for (int j = i + 1; j < 9; j++)
-        {
-            if (a[j] < a[min_index])
-            {
-                min_index = j;
-            }
-        }
-        int temp = a[min_index];
-        a[min_index] = a[i];
-        a[i] = temp;
-    }
+void selectsort(vector<int>& v) {
+	int size = v.size();
+	for (int i = 0; i < size; ++i) {
+		int pos = i;
+		for (int j = i; j < size; ++j) {
+			if (v[j] < v[pos]) {
+				pos = j;
+			}
+		}
+		swap(v[i], v[pos]);
+	}
+}
 ```
 
 - 选择排序是原地排序
@@ -146,58 +122,40 @@
 ![](../Picture/DataStruct/sort/05.jpg)
 
 ```cpp
-void merge(int * pt, int start, int end)
-{
-	if (end - start > 0)
-	{
-		int mid = start + (end - start) / 2;
-		merge(pt, start, mid);
-		merge(pt, mid + 1, end);
-
-		int * temp = new int[end - start + 1];
-		int p1 = start, p2 = mid + 1;
-		int k = 0;
-		while (k < end - start + 1)
-		{
-			if (p1 == mid + 1)
-			{
-				for (; k <= end && p2 <= end; ++k, ++p2)
-				{
-					temp[k] = pt[p2];
-				}
+void merge(vector<int>& v, int start, int end) {
+	if (end <= start) return;
+	int mid = start + (end - start) / 2;
+	merge(v, start, mid);
+	merge(v, mid + 1, end);
+	vector<int> tmp(end - start + 1);
+	int i = start, j = mid + 1, k = 0;
+	while (k < end - start + 1) {
+		if(i < mid + 1 && j < end + 1) {
+			if (v[i] < v[j]) {
+				tmp[k++] = v[i++];
 			}
-			if (p2 == end + 1)
-			{
-				for (; k <= end && p1 <= end; ++k, ++p1)
-				{
-					temp[k] = pt[p1];
-				}
+			else {
+				tmp[k++] = v[j++];
 			}
-
-			if (pt[p1] < pt[p2])
-			{
-				temp[k] = pt[p1];
-				++p1;
-			}
-			else
-			{
-				temp[k] = pt[p2];
-				++p2;
-			}
-			++k;
 		}
-
-		for (int i = 0; i < end - start + 1; ++i)
-		{
-			pt[start + i] = temp[i];
+		else if (i < mid + 1) {
+			while (i < mid + 1) {
+				tmp[k++] = v[i++];
+			}
 		}
-		delete[] temp;
+		else if (j < end + 1) {
+			while (j < end + 1) {
+				tmp[k++] = v[j++];
+			}
+		}
+	}
+	for (int p = start; p <= end; ++p) {
+		v[p] = tmp[p - start];
 	}
 }
 
-void merge_sort(int * pt, int len)
-{
-	merge(pt, 0, len - 1);
+void mergesort(vector<int>& v) {
+	merge(v, 0, v.size() - 1);
 }
 ```
 
@@ -218,40 +176,27 @@ void merge_sort(int * pt, int len)
 ![](../Picture/DataStruct/sort/08.jpg)
 
 ```cpp
-void quick_sort(int * pt, int len)
-{
-    quick_sort(pt, 0, len - 1);
-};
+int partition(vector<int>& v, int start, int end) {
+	int pos = start;
+	for (int i = start; i < end; ++i) {
+		if (v[i] < v[end]) {
+			swap(v[pos++], v[i]);
+		}
+	}
+	swap(v[pos], v[end]);
+	return pos;
+}
 
-void quick_sort(int * pt, int start, int end)
-{
-    if(end > start)
-    {
-        int pivot = partition(pt, start, end);
-        quick_sort(pt, start, pivot - 1);
-        quick_sort(pt, pivot + 1, end);
-    }
-};
+void quicksort(vector<int>& v, int start, int end) {
+	if (end <= start) return;
+	int p = partition(v, start, end);
+	quicksort(v, start, p - 1);
+	quicksort(v, p + 1, end);
+}
 
-int partition(int * pt, int start, int end)
-{
-    int val = pt[end];
-    int pivot = start;
-    for(int i = start; i <= end - 1; ++i)
-    {
-        if(pt[i] < val)
-        {
-            int temp = pt[i];
-            pt[i] = pt[pivot];
-            pt[pivot] = temp;
-            ++pivot;
-        }
-    }
-    pt[end] = pt[pivot];
-    pt[pivot] = val;
-    return pivot;
-};
-
+void quicksort(vector<int>& v) {
+	quicksort(v, 0, v.size() - 1);
+}
 ```
 
 
@@ -288,4 +233,4 @@ int partition(int * pt, int start, int end)
   
 ## 基数排序
   
-基数排序对要排序的数据是有要求的，需要能分割出独立的“位”来比较，而且位之间有递进关系，如果高位的数据大则剩下地位则不需要比较；而且，每位的数据范围不能大，能采用线性排序算法来排序
+基数排序对要排序的数据是有要求的，需要能分割出独立的位来比较，而且位之间有递进关系，如果高位的数据大则剩下地位则不需要比较；而且，每位的数据范围不能大，能采用线性排序算法来排序
