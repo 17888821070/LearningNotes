@@ -20,7 +20,7 @@ STL容器和算法需要用到比较器时，是假设了比较器是满足严�
 ## sort
 
 ```cpp
-sort 默认使用类或结构体的 < 进行比较，< 返回 true时不交换位置
+sort 默认使用类或结构体的 < 进行比较，< 返回 true 时不交换位置
 
 auto comp = [](int a, int b) {
     return a < b;

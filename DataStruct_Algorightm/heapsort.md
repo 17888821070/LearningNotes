@@ -38,6 +38,58 @@
 
 堆排序的建堆过程时间复杂度 O(n)
 
+```cpp
+class heap {
+private:
+	vector<int> h;
+
+public:
+	heap() : h(1) {}
+
+	void push(int n) {
+		h.push_back(n);
+		int pos = h.size() - 1;
+		while (pos / 2 > 0) {
+			if (h[pos] > h[pos / 2]) swap(h[pos], h[pos / 2]);
+			pos /= 2;
+		}
+	}
+
+	void pop() {
+		int pos = h.size() - 1;
+		swap(h[pos], h[1]);
+		h.pop_back();
+		pos = 1;
+		while (1) {
+			if (2 * pos >= h.size()) {
+				break;
+			}
+			else if (2 * pos + 1 >= h.size()) {
+				if (h[pos] < h[pos * 2]) {
+					swap(h[pos], h[2 * pos]);
+				}
+				break;
+			}
+			else {
+				if (h[2 * pos] > h[2 * pos + 1]) {
+					if (h[pos] < h[2 * pos]) {
+						swap(h[pos], h[2 * pos]);
+						pos = 2 * pos;
+					}
+					else break;
+				}
+				else {
+					if (h[pos] < h[2 * pos + 1]) {
+						swap(h[pos], h[2 * pos + 1]);
+						pos = 2 * pos + 1;
+					}
+					else break;
+				}
+			}
+		}
+	}
+};
+```
 
 ## 堆排序
 
