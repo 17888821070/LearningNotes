@@ -61,6 +61,56 @@
 
 ![](../Picture/DataStruct/heap/06.jpg)
 
+```cpp
+void buildsort(vector<int>& v, int n) {
+	// 1 从下往上
+	//for (int i = 1; i < n; ++i) {
+	//	int j = i;
+	//	while (j > 0) {
+	//		int p = (j - 1) / 2;
+	//		if (v[p] < v[j]) {
+	//			swap(v[p], v[j]);
+	//			j = p;
+	//		}
+	//		else break;
+	//	}
+	//}
+
+	// 2 从上往下
+	for (int i = n / 2 - 1; i >= 0; --i) {
+		int j = i;
+		while (j < n / 2) {
+			int l = 2 * j + 1, r = 2 * j + 2;
+			if (r < n) {
+				int tmp;
+				if (v[l] < v[r]) tmp = r;
+				else tmp = l;
+				if (v[j] < v[tmp]) {
+					swap(v[j], v[tmp]);
+					j = tmp;
+				}
+				else break;
+			}
+			else if (l < n) {
+				if (v[j] < v[l]) {
+					swap(v[j], v[l]);
+					j = l;
+				}
+				else break;
+			}
+		}
+	}
+}
+
+void heapsort(vector<int>& v) {
+	int size = v.size();
+	for (int i = 0; i < size; ++i) {
+		buildsort(v, v.size() - i);
+		swap(v[size - 1 - i], v[0]);
+	}
+}
+```
+
 ## 与快排比较
 1. 堆排序数据访问方式没有快排友好：堆排跳着访问数据，快排顺序访问数据，对CPU缓存不友好
 2. 对于同样的数据，在排序过程中，堆排数据交换次数多于快排
