@@ -48,7 +48,9 @@ redo log 的写入拆成了两个步骤：prepare 和 commit，这就是两阶�
 
 6. 执行器调用引擎的提交事务接口，引擎把刚刚写入的 redo log 改成提交（commit）状态，更新完成
 
- MySQL 以 binlog 的写入与否作为事务是否成功的标记
+![](../../Picture/Database/MySQL/log/01.jpg)
+
+MySQL 以 binlog 的写入与否作为事务是否成功的标记
 
 ## 奔溃恢复规则
 
@@ -62,4 +64,24 @@ redo log 和 binlog 有一个共同的数据字段，叫 XID
 
 先写 redo log 后写 binlog：假设在 redo log 写完，binlog 还没有写完的时候，MySQL 进程异常重启；由于 bin log 日志没有修改记录，使用 redo log + bin log 恢复的数据就是数据库旧的数据
 
-先写 bin log 后写 redo log：假设在 bin log 写完，redo log 还没有完成的时候，MySQL 进程异常重启；
+先写 bin log 后写 redo log：假设在 bin log 写完，redo log 还没有完成的时候，MySQL 进程异常重启
+
+binlog 写入后会被从库（或者用这个 binlog 恢复出来的库）使用，保证主库和备库的数据就一致性
+
+## binlog 完整性
+
+MySQL 引入 binlog-checksum 参数，用来验证 binlog 内容的正确性
+
+## binlog 相比 redo log 优越性
+
+1. redo log 是循环写，写到末尾是要回到开头继续写的，这样历史日志没法保留，redo log 也就起不到归档的作用
+
+2. MySQL 系统依赖于 binlog，系统高可用的基础，就是 binlog 复制
+
+## redo log buffer
+
+redo log buffer 就是一块内存，用来先存 redo 日志的
+
+真正把日志写到 redo log 文件，是在执行 commit 语句的时候做的
+
+事务执行过程中不会主动去刷盘，以减少不必要的 IO 消耗，但是可能会出现被动写入磁盘，比如内存不够、其他事务提交等情况

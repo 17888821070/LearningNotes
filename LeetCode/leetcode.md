@@ -209,14 +209,6 @@ LRU
 
 [分析](https://www.youtube.com/watch?v=q1Njd3NWvlY)
 
-## LC 221 最大子矩形
-
-DP
-
-[题目](https://leetcode.com/problems/maximal-square/)
-
-[分析](https://www.youtube.com/watch?v=vkFUB--OYy0)
-
 
 ## LC 207 210 课程安排
 
@@ -501,7 +493,7 @@ dp[i][j] = max(dp[i - 1][k] + sum(j, k) / (j - k)) k : i - 1 ~ j - 1
 
 二分
 
-[题目]https://leetcode.com/problems/find-in-mountain-array/)
+[题目](https://leetcode.com/problems/find-in-mountain-array/)
 
 [分析](https://www.bilibili.com/video/BV1m5411V7x7)
 
