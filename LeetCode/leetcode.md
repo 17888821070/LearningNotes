@@ -349,15 +349,6 @@ DP
 [题目](https://leetcode.com/problems/combination-sum-iv/)
 
 
-## LC 547 朋友圈
-
-UnionFind
-
-[题目](https://leetcode.com/problems/friend-circles/)
-
-[分析](https://www.youtube.com/watch?v=HHiHno66j40)
-
-
 ## LC 410 分割数组得到子数组的最小和
 
 DP
@@ -449,6 +440,15 @@ dp[i][j] = dp[i- 1][j] + dp[i][j - coins[i]]
 ```
 
 [题目](https://leetcode.com/problems/coin-change-2/)
+
+
+## LC 547 朋友圈
+
+UnionFind
+
+[题目](https://leetcode.com/problems/friend-circles/)
+
+[分析](https://www.youtube.com/watch?v=HHiHno66j40)
 
 
 ## LC 560 子数组和
