@@ -18,14 +18,19 @@ static_cast<type-id>(expression)
 
 
 ## dynamic_cast
+
 ```cpp
 dynamic_cast<type-id>(expression)
 // 1. 基类必须要有虚函数，因为 dynamic_cast 是运行时类型检查，需要运行时类型信息，而这个信息是存储在类的虚函数表中，只有一个类定义了虚函数，才会有虚函数表
 // 2. 对于向下转换，dynamic_cast 是安全的（当类型不一致时，转换过来的是空指针），而 static_cast 是不安全的（当类型不一致时，转换过来的是错误意义的指针，可能造成踩内存，非法访问等各种问题）
 // 3. dynamic_cast 还可以进行交叉转换
 ```
+
 只有在派生类之间转换时才使用 `dynamic_cast`，`type-id` 必须是类指针，类引用或者 `void*`
 
+根据 C++ 对象模型，对象的 `type_info` 被存在了虚表的首部，所以要使用 `dynamic_cast`，对象必须有多态，然后运行时期比对要转换的类型是否和 `type_info` 中记录的类型相同即可
+
+![](../../Picture/Cpp/syntax/cast/01.png)
 
 ## const_cast
 ```cpp
