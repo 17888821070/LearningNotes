@@ -26,6 +26,8 @@ Reactor 线程负责多路分离套接字，accept 新连接，并分派请求�
 
 单 Reactor 单线程模型只是在代码上进行了组件的区分，但是整体操作还是单线程，不能充分利用硬件资源
 
+单 Reactor 单线程的方案不适用计算机密集型的场景，只适用于业务处理非常快速的场景
+
 ### 单 Reactor 多线程模型
 
 ![](../Picture/Network/reactor_proactor/02.jpeg)
@@ -51,6 +53,8 @@ Reactor 线程负责多路分离套接字，accept 新连接，并分派请求�
 Reactor 承担所有事件的监听和响应，只在主线程中运行，可能会存在性能问题
 
 ### 主从 Reactor 多线程模型
+
+单 Reactor 模式因为只有一个 Reactor 对象承担所有事件的监听和响应，而且只在主线程中运行，在面对瞬间高并发的场景时，容易成为性能的瓶颈的地方
 
 mainReactor 负责监听 server socket，用来处理网络 IO 连接建立操作，将建立的 socketChannel 指定注册给 subReactor，subReactor 主要做和建立起来的 socket 做数据交互和事件业务处理操作
 
