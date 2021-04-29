@@ -79,6 +79,52 @@ int y = std::move(x);
 
 C++11 允许在一个构造函数定义中使用另一个构造函数
 
+## 构造函数初始化过程
+
+构造函数的执行可以分成两个阶段，初始化阶段和计算阶段，初始化阶段先于计算阶段
+
+所有类成员都会在初始化阶段初始化，即使该成员没有出现在构造函数的初始化列表中
+
+```cpp
+struct Test1 {
+    Test1() { 
+        cout << "Construct Test1" << endl ;
+    }
+
+    Test1(const Test1& t1) {
+        cout << "Copy constructor for Test1" << endl ;
+        this->a = t1.a ;
+    }
+
+    Test1& operator = (const Test1& t1) {
+        cout << "Assignment for Test1" << endl ;
+        this->a = t1.a ;
+        return *this;
+    }
+
+    int a ;
+};
+
+struct Test2 {
+    Test1 test1 ;
+    Test2(Test1 &t1) {
+        test1 = t1 ;
+    }
+};
+
+Test1 t1;
+Test2 t2(t1);
+
+/*
+Construct Test1
+Construct Test1
+Assignment for Test1
+*/
+```
+
+在初始化列表中构造成员类，可以省去调用默认构造函数的过程，直接调用指定构造函数进行初始化
+
+初始化列表中的成员是按照在类中出现的顺序进行初始化的，而不是按照在初始化列表出现的顺序初始化
 
 ## 析构函数
 
