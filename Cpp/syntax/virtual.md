@@ -181,6 +181,46 @@ int main(void)
 }
 ```
 
+### 初始化时机
+
+在编译的过程中编译器就为含有虚函数的类创建了虚函数表，并且编译器会在构造函数中插入一段代码，这段代码用来给虚函数指针赋值
+
+对于虚函数指针来说，由于虚函数指针是基于对象的，所以对象在实例化的时候，虚函数指针就会创建，所以是在运行时创建
+
+对象虚指针赋值发生在当前类构造函数初始化列表执行前，其基类构造函数执行后
+
+```cpp
+class Base {
+public:
+    Base() { Foo(); }   ///< 可能的结果：编译警告、链接出错、运行时错误
+
+    virtual void Foo() {
+        cout<<1<<endl;
+    }
+};
+
+class Derive : public Base {
+public:
+    Derive() : Base(), m_pData(new int(2)) {}
+    ~Derive() { delete m_pData; }
+
+    virtual void Foo() {
+        std::cout << *m_pData << std::endl;
+    }
+private:
+    int* m_pData;
+};
+
+Base* p = new Derive();
+delete p;
+
+/*
+打印 1
+*/
+```
+
+禁止在基类构造、析构函数中调用虚函数，此时对象会被下降为父类类型对待，将导致程序出现一些未定义行为
+
 ## 虚继承
 
 菱形继承即多个类继承了同一个公共基类，而这些派生类又同时被一个类继承
