@@ -116,7 +116,7 @@ public:
         cout << "Base::fun2()" << endl;
     }
     virtual void fun3(){}
-    ~Base(){};
+    virtual ~Base(){};
 };
 
 /**
@@ -134,7 +134,7 @@ public:
     {
         cout << "DerivedClass::fun2()" << endl;
     }
-    ~Derived(){};
+    virtual ~Derived(){};
 };
 
 /**
@@ -142,17 +142,20 @@ public:
  */
 Fun getAddr(void* obj,unsigned int offset)
 {
-    cout<<"======================="<<endl;
-    void* vptr_addr = (void *)*(unsigned long *)obj;  //64位操作系统，占8字节，通过*(unsigned long *)obj取出前8字节，即vptr指针
-    printf("vptr_addr:%p\n",vptr_addr);
+    cout << "=======================" << endl;
+	// 32 位操作系统，占 4 字节，通过 *(unsigned int*)obj 取出前 4 字节，即 vptr 指针
+	unsigned int vptr= *(unsigned int*)obj;
+	printf("vtable addr: %p\n", vptr);
 
-    /**
-     * @brief 通过vptr指针访问virtual table，因为虚表中每个元素(虚函数指针)在64位编译器下是8个字节，因此通过*(unsigned long *)vptr_addr取出前8字节，
-     * 后面加上偏移量就是每个函数的地址！
-     */
-    void* func_addr = (void *)*((unsigned long *)vptr_addr+offset);
-    printf("func_addr:%p\n",func_addr);
-    return (Fun)func_addr;
+	/*
+	 * 通过 vptr 指针访问 virtual table 
+	 * 因为虚表中每个元素在 32 位编译器下是 4 个字节
+	 * 因此通过 *(unsigned int*)vptr_addr 取出前 4 字节，
+	 * 后面加上偏移量就是每个函数的地址！
+	 */
+	unsigned int func_addr = *(unsigned int*)(vptr + 4 * offset);
+	printf("func_addr: %p\n", func_addr);
+	return (Fun)func_addr;
 }
 
 int main(void)
