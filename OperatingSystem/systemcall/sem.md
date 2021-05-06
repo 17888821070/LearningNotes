@@ -102,7 +102,7 @@ int sem_unlink(const char *name);
 
 ## 共同操作
 
-### waip
+### wait
 
 `sem_wait()` 为信号量值减一操作，总共有三个函数
 
