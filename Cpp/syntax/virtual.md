@@ -9,51 +9,73 @@
 ```cpp
 class Employee {
 public: 
-    virtual void raiseSalary() 
-    {
+    virtual void raiseSalary()  {
         cout<<0<<endl; 
     }
 
-    virtual void promote() 
-    { /* common promote code */ } 
+    virtual void promote() {} 
 }; 
 
 class Manager: public Employee { 
-    virtual void raiseSalary() 
-    {   
+    virtual void raiseSalary() {   
         cout<<100<<endl;    
     } 
 
-    virtual void promote() 
-    { /* Manager specific promote */ } 
+    virtual void promote() {}
 }; 
 class Engineer: public Employee { 
-    virtual void raiseSalary() 
-    {
+    virtual void raiseSalary() {
         cout<<200<<endl;    
     }
 
-    virtual void promote() 
-    { /* Manager specific promote */ } 
+    virtual void promote() {}
 }; 
 
-// Similarly, there may be other types of employees 
-// We need a very simple function to increment salary of all employees 
-// Note that emp[] is an array of pointers and actual pointed objects can 
-// be any type of employees. This function should ideally be in a class  
-// like Organization, we have made it global to keep things simple 
-void globalRaiseSalary(Employee *emp[], int n) 
-{ 
+void globalRaiseSalary(Employee *emp[], int n) { 
     for (int i = 0; i < n; i++) 
-        emp[i]->raiseSalary(); // Polymorphic Call: Calls raiseSalary()  
-    // according to the actual object, not  
-    // according to the type of pointer                                  
+        emp[i]->raiseSalary(); 
 } 
-int main(){
-    Employee *emp[]={new Manager(),new Engineer};
-    globalRaiseSalary(emp,2); 
+
+int main() {
+    Employee *emp[]={new Manager, new Engineer};
+    globalRaiseSalary(emp, 2); 
     return 0;
 }
+```
+
+```cpp
+class A {
+public:
+	A() : num(1) {}
+	virtual void func() {
+		cout << "A" << num << endl;
+	}
+	virtual ~A() {
+		cout << "~A" << endl;
+	}
+	void funcc() {
+		cout << "A::funcc" << num << endl;
+	}
+	int num;
+};
+
+class B : public A {
+public:
+	B() : A() { num = 2; }
+	virtual void func() {
+		cout << "B" << num << endl;
+	}
+	virtual ~B() {
+		cout << "~B" << endl;
+	}
+	void funcc() {
+		cout << "B::funcc" << num << endl;
+	}
+};
+
+A* a = new B;
+a->funcc();
+// A::funcc2
 ```
 
 ### 纯虚函数和抽象类
