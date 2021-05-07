@@ -178,7 +178,7 @@ select 允许应用程序监视一组文件描述符，等待一个或者多个�
 
 select 监控的 fd 有上限，取决于 `sizeof(fd_set)` 的大小
 
-将 fd 加入 select 监控集的同时，还要再使用一个 array 保存放到 select 监控集中的 fd，一是用于当 select 返回后需要 array 作为源数据和 fd_set 进行 FD_ISSET 判断；二是select 返回后会把以前加入的但并无事件发生的 fd 清空，则每次开始 select 前都要重新从 array 取得 fd 逐一加入（FD_ZERO最先），扫描 array 的同时取得 fd 最大值 maxfd，用于 select 的第一个参数
+将 fd 加入 select 监控集的同时，还要再使用一个 array 保存放到 select 监控集中的 fd，一是用于当 select 返回后需要 array 作为源数据和 fd_set 进行 FD_ISSET 判断；二是 select 返回后会把以前加入的但并无事件发生的 fd 清空，则每次开始 select 前都要重新从 array 取得 fd 逐一加入（FD_ZERO 最先），扫描 array 的同时取得 fd 最大值 maxfd，用于 select 的第一个参数
 
 当套接字比较多的时候，每次 `select()` 都要通过遍历 FD_SETSIZE 个 socket 来完成调度，不管哪个 socket 是活跃的，都遍历一遍
 
@@ -332,7 +332,7 @@ EPOLLET 通过与其他事件取或运算，使该事件成为边缘触发模式
 int pollingfd = epoll_create( 0xCAFE );
 
 if ( pollingfd < 0 )
- // report error
+// report error
 
 // Initialize the epoll structure in case more members are added in future
 struct epoll_event ev = { 0 };
@@ -346,7 +346,7 @@ ev.events = EPOLLIN | EPOLLONESHOT;
 // Add the descriptor into the monitoring list. We can do it even if another thread is
 // waiting in epoll_wait - the descriptor will be properly added
 if ( epoll_ctl( epollfd, EPOLL_CTL_ADD, pConnection1->getSocket(), &ev ) != 0 )
-    // report error
+// report error
 
 // Wait for up to 20 events (assuming we have added maybe 200 sockets before that it may happen)
 struct epoll_event pevents[ 20 ];
@@ -355,9 +355,9 @@ struct epoll_event pevents[ 20 ];
 int ret = epoll_wait( pollingfd, pevents, 20, 10000 );
 // Check if epoll actually succeed
 if ( ret == -1 )
-    // report error and abort
+// report error and abort
 else if ( ret == 0 )
-    // timeout; no event detected
+// timeout; no event detected
 else
 {
     // Check if any events detected
