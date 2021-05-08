@@ -1,5 +1,24 @@
 # 右值相关
 
+## 左值与右值
+
+- 左值是在作用域内表达式运行结束后依然存在的持久对象，它有明确地址能够被访问到
+
+- 右值指表达式结束后不再存在的临时对象，且进一步划分为纯右值和将亡值
+
+- 纯右值指字面量或求值结果相当于字面量或匿名临时变量、非引用返回的临时变量等，它没有地址可供访问
+
+- 将亡值指即将被销毁却能够被移动的值，它有地址但是仅能被编译器操作，程序不可访问，它的资源可以被复用
+
+```cpp
+int a = 3;  // 左值
+
+int setValue() {
+    a = 4;  // 4 是字面量，纯右值
+    return a;  // 返回结果为将亡值
+}
+```
+
 ## move
 
 `#include <utility>`
@@ -74,10 +93,10 @@ int x = 10;
 const int cx = x;
 const int& rx = x;
 
-f(x);//param为int&
-f(cx);//param为const int&
-f(rx);//param为const int&（实参的&被忽略了）
-//以上的形参是左值引用，当改成右值引用时，情况一样
+f(x);  // param 为 int&
+f(cx); // param 为 const int&
+f(rx); // param 为 const int&（实参的 & 被忽略了）
+// 以上的形参是左值引用，当改成右值引用时，情况一样
 ```
 - 形参是万能引用，既不是左值引用也不是右值引用的引用，并且它最终既可以做左值引用也可以做右值引用，形如 `T&&`，只要涉及型别推导，那么它就是一个万能引用，否则就是右值引用
 
@@ -87,31 +106,31 @@ f(rx);//param为const int&（实参的&被忽略了）
 2. `X&& &&` 折叠为 `X&&`
 
 ```cpp
-void f(Widget&& param);//param是右值引用，因为它的类型已经确定，不涉及型别推导
+void f(Widget&& param);  // param 是右值引用，因为它的类型已经确定，不涉及型别推导
 
-Widget&& var1 = Widget();//同上
+Widget&& var1 = Widget();  // 同上
 
-auto&& var2 = var1;//万能引用
+auto&& var2 = var1;  // 万能引用
 
 template<typename T>
-void f(std::vector<T>&& param);//右值引用
+void f(std::vector<T>&& param);  // 右值引用
     
 template<typename T>
-void f(T&& param);//万能引用
+void f(T&& param);  // 万能引用
 
 
 template<typename T>
-void f(T&& param);//param现在是个万能引用
+void f(T&& param);  // param 现在是个万能引用
 
-int x = 10; //同前
-const int cx = x;//同前
-const int& rx = x;//同前
+int x = 10;  // 同前
+const int cx = x;  // 同前
+const int& rx = x;  // 同前
 
-f(x);//因为 x 是左值，所以 param 为 int&，T = int&
-f(cx);//因为 x 是左值，所以 param 为 const int &，T = const int&
-f(rx);//因为 x 是左值，所以 param 为 const int & ，T = const int&（实参的&被忽略了）
+f(x);  // 因为 x 是左值，所以 param 为 int&，T = int&
+f(cx);  // 因为 x 是左值，所以 param 为 const int &，T = const int&
+f(rx);  // 因为 x 是左值，所以 param 为 const int & ，T = const int&（实参的&被忽略了）
 
-f(10);//因为 10 是右值，所以 param 为 int &&，T = int
+f(10);  // 因为 10 是右值，所以 param 为 int &&，T = int
 ```
 
 万能引用的作用就是当你传入左值，那么它最终就是左值引用，传入右值，那么它就是右值引用
