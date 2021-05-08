@@ -48,6 +48,8 @@ lambda 表达式是 inline 函数
 
 - `{}`：函数体
 
+- lambda 表达式默认是 const 函数，表达式内无法修改捕获的任何变量，但可以指定为 `mutable`，修改为非 const 函数
+
 
 ## std::function
 
