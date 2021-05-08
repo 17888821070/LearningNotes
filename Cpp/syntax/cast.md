@@ -109,6 +109,10 @@ reinterpret_cast<type-id>(expression)
 
 不能声明返回类型，形参列表也必须为空
 
+支持继承，可以为虚函数
+
 ```cpp
 operator type() const;
 ```
+
+只要存在转换，编译器将在可以使用内置转换的地方自动调用

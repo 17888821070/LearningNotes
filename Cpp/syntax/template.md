@@ -144,3 +144,102 @@ protected:
     Head m_head;
 }
 ```
+
+### 自动生成 Hook 函数
+
+```cpp
+// 前置声明
+template<class T>
+class Executor;
+
+// 偏特化模板定义
+template<typename R, typename... Args>
+class Executor<R(Args...)> {
+private:
+   using FunctionType = R(*)(Args...);
+
+public:
+   Executor(FuntionType func) : func_(func) {}
+
+public:
+   R executor(Args... args) {
+      /*
+      
+      */
+      ++count_;
+      return func_(args);
+   }
+
+private:
+   FunctionType const func_;
+   int count_ = 0;
+}
+
+// 函数原型
+ssize_t read(int fd, void* const buf, size_t count);
+
+auto executor_read = new Executor<decltype(read)>(read);
+executor_read->executor(fd, buf, count);
+```
+
+## 模板特化
+
+全特化是限定模板实现的具体类型，偏特化是如果这个模板有多个类型，那么只限定其中的一部分
+
+函数模板，却只有全特化，不能偏特化，因为偏特化的功能可以通过函数的重载完成
+
+```cpp
+template<class T>
+class Compare {
+public:
+   bool equal(T a, T b) {
+      return a == b;
+   }
+};
+```
+
+### 全特化
+
+```cpp
+template<>
+class Compare<float> {
+public:
+   bool equal(float a, float b) {
+      return abs(a - b) < 10e-3;
+   }
+};
+```
+
+### 偏特化
+
+```cpp
+template<class T1,class T2>
+class Test {
+public:
+   Test(T1 a, T2 b) : _a(a), _b(b) {}
+private:
+   T1 _a;
+   T2 _b;
+};
+
+//模板全特化
+template<>
+class Test<int, int> {
+public:
+   Test(int a, int b) : _a(a), _b(b) {}
+private:
+   int _a;
+   int _b;
+};
+
+// 偏特化
+template<class T>
+class Test<int, T> {
+public:
+   Test(int a, T b) : _a(a), _b(b) {}
+private:
+   int _a;
+   T _b;
+};
+
+```
