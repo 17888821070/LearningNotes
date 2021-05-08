@@ -17,6 +17,20 @@ C++ 的操作符 `<`、`>` 是严格弱序的，`>=`、`<=` 不是
 
 STL容器和算法需要用到比较器时，是假设了比较器是满足严格弱序的，如果违反则出现 core down
 
+## 泛型算法
+
+### 形参模式
+
+```cpp
+algo(begin, end, other args)
+
+algo(begin, end, dest, other args)
+
+algo(begin, end, begin2, other_args)
+
+algo(begin1, end1, begin2, end2, other_args)
+```
+
 ## sort
 
 ```cpp
