@@ -20,6 +20,14 @@ int main() {
 gdb a.out
 ```
 
+## 启动 GDB
+
+- 启动程序并调试，`gdb [program]`
+
+- 调试 core 文件，`gdb [program] [core]`
+
+- 通过 pid 调试已运行的程序，`gdb [program] [pid]`
+
 ## 基本命令
 
 ### run
