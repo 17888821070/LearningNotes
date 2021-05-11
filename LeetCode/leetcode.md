@@ -488,6 +488,29 @@ dp[i][j] = max(dp[i - 1][k] + sum(j, k) / (j - k)) k : i - 1 ~ j - 1
 
 [题目](https://leetcode.com/problems/palindromic-substrings/)
 
+## LC 926 反转字符串
+
+DP
+
+```cpp
+/*
+prefix + suffix
+l[i] : filps of s[0] ~ s[i] all 0
+r[i] : filps of s[i] ~ s[n - 1] all 1
+l[i] = l[i - 1] + s[i] == 1
+r[i] = r[i + 1] + s[i] == 0
+ans = min(l[i - 1] + r[i], l[n - 1], r[0])
+
+
+dp[i][0] : ans of s[0] ~ s[i] and s[i] == '0'
+dp[i][1] : ans of s[0] ~ s[i] and s[i] == '1'
+*/
+```
+
+[题目](https://leetcode.com/problems/flip-string-to-monotone-increasing/)
+
+[分析](https://www.youtube.com/watch?v=D8xa8ZMV7AI)
+
 
 ## LC 1095 山峰数组找目标值
 
