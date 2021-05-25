@@ -50,7 +50,7 @@ std::move(s1)
 
 ## forward
 
-`std::forward` 不仅可以保持左值或者右值不变，同时还可以保持 `const`、`Lreference`、`Rreference`、`validate` 等属性不变
+`std::forward` 不仅可以保持左值或者右值不变，同时还可以保持 `const`、`Lreference`、`Rreference`、`volatile` 等属性不变
 
 ```cpp
 void PrintV(int &t) {
