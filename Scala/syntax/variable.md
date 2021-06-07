@@ -30,3 +30,7 @@ val VariableName : DataType [=  Initial Value]
 ```scala
 val xmax, ymax = 100  // xmax, ymax都声明为100
 ```
+
+## lazy
+
+`var` 和 `val` 都会在声明时定义且赋值，使用 `lazy` 标记变量则在第一次使用时定义且在定义时赋初值
