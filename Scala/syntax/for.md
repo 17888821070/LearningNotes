@@ -103,9 +103,8 @@ object Test {
 将 `for` 循环的返回值作为一个变量存储
 
 ```scala
-var retVal = for{ var x <- List
-    if condition1; if condition2...
-}yield x
+var retVal = for( var x <- List
+    if condition1; if condition2...) yield x;
 // 大括号中用于保存变量和条件，retVal 是变量
 // 循环中的 yield 会把当前的元素记下来，保存在集合中
 // 循环结束后将返回该集合
@@ -118,7 +117,7 @@ object Test {
        // for 循环
        var retVal = for{ a <- numList
                          if a != 3; if a < 8
-                    }yield a
+                    }yield a;
 
       // 输出返回值
        for( a <- retVal){
@@ -126,4 +125,12 @@ object Test {
         }
     }
 }
+
+/*
+1. {} 和 () 对于 for 表达式来说都可以
+
+2. 当 for 推导式仅包含单一表达式时使用圆括号，当其包含多个表达式时使用大括号
+
+3. 当使用 {} 来换行写表达式时，分号就不用写了
+*/
 ```
