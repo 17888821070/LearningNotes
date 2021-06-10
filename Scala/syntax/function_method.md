@@ -313,3 +313,16 @@ object Test {
    }
 }
 ```
+
+## 闭包
+
+闭包是一个函数，返回值依赖于声明在函数外部的一个或多个变量
+
+```scala
+var factor = 3  
+val multiplier = (i:Int) => i * factor
+/*
+引入一个自由变量 factor，这个变量定义在函数外面
+函数变量 multiplier 成为一个闭包
+*/
+```

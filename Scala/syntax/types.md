@@ -83,6 +83,21 @@ true
 
 ## 字符串
 
+在 Scala 中，`String` 是一个不可变的对象，所以该对象不可被修改，如果修改字符串就会产生一个新的字符串对象
+
+如果需要创建一个可以修改的字符串，可以使用 `String Builder` 类
+
+```scala
+object Test {
+   def main(args: Array[String]) {
+      val buf = new StringBuilder;
+      buf += 'a'
+      buf ++= "bcdef"
+      println( "buf is : " + buf.toString );
+   }
+}
+```
+
 ### 字符串字面量
 
 字符串字面量使用双引号 `""` 来定义
@@ -106,3 +121,61 @@ www.runnoob.com
 ![](../../Picture/Scala/types/02.png)
 
 转换是单向
+
+## 数组
+
+### 一维数组#
+
+数组是用来存储固定大小的同类型元素
+
+```scala
+var z:Array[String] = new Array[String](3)
+
+var z = new Array[String](3)
+
+z(0) = "Runoob"; z(1) = "Baidu"; z(4/2) = "Google"
+
+var z = Array("Runoob", "Baidu", "Google")
+```
+
+### 多维数组
+
+维数组一个数组中的值可以是另一个数组，另一个数组的值也可以是一个数组
+
+```scala
+// 二维
+import Array._
+
+object Test {
+   def main(args: Array[String]) {
+      val myMatrix = Array.ofDim[Int](3, 3)
+     
+      // 创建矩阵
+      for (i <- 0 to 2) {
+         for ( j <- 0 to 2) {
+            myMatrix(i)(j) = j;
+         }
+      }
+     
+      // 打印二维阵列
+      for (i <- 0 to 2) {
+         for ( j <- 0 to 2) {
+            print(" " + myMatrix(i)(j));
+         }
+         println();
+      }
+   
+      // 合并
+      var myList1 = Array(1.9, 2.9, 3.4, 3.5)
+      var myList2 = Array(8.9, 7.9, 0.4, 1.5)
+
+      var myList3 =  concat( myList1, myList2)
+
+      // 区间数组
+      // 使用 range() 方法来生成一个区间范围内的数组
+      // 最后一个参数为步长，默认为 1
+      var myList1 = range(10, 20, 2)
+      var myList2 = range(10,20)
+   }
+}
+```
