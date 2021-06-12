@@ -131,6 +131,38 @@ def toString(): String
 // 列表转换为字符串
 ```
 
+由于 `List` 是 immutable 集合，可以使用 `ListBuffer` 来生成链表
+
+```scala
+var l = ListBuffer[Int]
+for(i <- 0 to 10) {
+  l += i
+}
+val ll = l.toList
+```
+
+## Set
+
+`Set` 是没有重复的对象集合，所有的元素都是唯一的
+
+`Set` 分为可变的和不可变的集合
+
+默认情况下，Scala 使用的是不可变集合，如果想使用可变集合，需要引用 `scala.collection.mutable.Set` 包，默认引用 `scala.collection.immutable.Set`
+
+## Map
+
+`Map` 有两种类型，可变与不可变，默认情况下 Scala 使用不可变 `Map`，如果需要使用可变集合，需要显式的引入 `import scala.collection.mutable.Map` 类
+
+- `keys()` 返回 `Map` 所有的键
+
+- `values()` 返回 `Map` 所有的值
+
+- `isEmpty()` 在 `Map` 为空时返回 `true`
+
+可以使用 `++` 运算符或 `Map.++()` 方法来连接两个 `Map`，`Map` 合并时会移除重复的 key
+
+可以使用 `Map.contains` 方法来查看 `Map` 中是否存在指定的 Key
+
 ## Iterator
 
 Scala `Iterator` 不是一个集合，它是一种用于访问集合的方法
@@ -152,6 +184,8 @@ object Test {
    }
 }
 ```
+
+可以使用 `++` 运算符或 `Set.++()` 方法来连接两个集合，如果元素有重复的就会移除重复的元素
 
 ## Option
 
