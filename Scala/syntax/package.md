@@ -2,6 +2,8 @@
 
 ## 定义包
 
+包名称应全部为小写
+
 ```scala
 /*
 第一种
@@ -43,3 +45,8 @@ import java.util.{HashMap => JavaHashMap}
 import java.util.{HashMap => _, _} 
 // 引入了 util 包的所有成员，但是 HashMap 被隐藏了
 ```
+
+## 目录结构
+
+包名和目录应采用以下的约定格式：`<top-level-domain>.<domain-name>.<project-name>`，如 `com.google.selfdrivingcar.camera`，对应的目录结构 `SelfDrivingCar/src/main/scala/com/google/selfdrivingcar/camera/Lens.scala`
+
