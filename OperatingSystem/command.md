@@ -288,6 +288,32 @@ awk '{print $1 "\t" $2 "\t" $3}' fruit.txt：在参数列表中加入一些字�
 awk '{print NR "\t" $0}' fruit.txt：内置 NR 变量表示每一行的行号
 
 awk '{print NF "\t" $0}' fruit.txt：内置 NF 变量表示每一行的列数
+
+搭配 if
+awk '{num = 10; if (num % 2 == 0) printf "%d 是偶数\n", num }'
+
+搭配 if-else
+awk '{
+    num = 11; 
+    if (num % 2 == 0) printf "%d 是偶数\n", num; 
+    else printf "%d 是奇数\n", num 
+}'
+
+搭配 for
+awk '{ for (i = 1; i <= 5; ++i) print i }'
+
+搭配 while
+awk '{i = 1; while (i < 6) { print i; ++i } }'
+
+搭配 break
+awk '{
+   sum = 0; for (i = 0; i < 20; ++i) { 
+      sum += i; if (sum > 50) break; else print "Sum =", sum 
+   } 
+}'
+
+搭配 continue
+awk '{for (i = 1; i <= 20; ++i) {if (i % 2 == 1) continue ; else print i} }'
 ```
 
 ## sed
