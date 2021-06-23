@@ -417,3 +417,12 @@ update-alternatives --config name
 update-alternatives --remove name path
 name 与 path 与 install 中的一致
 ```
+
+## ln
+
+```
+ln [参数][源文件或目录][目标文件或目录]
+默认硬链接
+-s 软链接
+```
+
