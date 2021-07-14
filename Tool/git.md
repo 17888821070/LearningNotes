@@ -1,5 +1,7 @@
 # Git
 
+![](../Picture/Tool/git/02.png)
+
 ## 配置
 
 ### 系统配置
