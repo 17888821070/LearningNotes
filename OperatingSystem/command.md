@@ -426,3 +426,40 @@ ln [参数][源文件或目录][目标文件或目录]
 -s 软链接，源文件需使用绝对地址
 ```
 
+## split
+
+分割文件
+
+```
+split [-a suffix_length] [-b byte_count[k|m]] [-l line_count] [-d] [file [name]]
+
+line_count: 指定每多少行切成一个小文件
+byte_count: 指定每多少字节切成一个小文件，单位 M 和 kb
+-d: 使用数字作为后缀
+-a: 指定后缀长度
+
+```
+
+## tar
+
+```
+tar [-cxtzjvfpPN] target source
+
+-c: 建立一个压缩文件的参数指令
+-x: 解开一个压缩文件的参数指令
+-t: 查看 target 里面的文件
+-z: 用 gzip 压缩
+-j: 用 bzip2 压缩
+-v: 压缩的过程中显示文件
+-f: 使用档名，在 f 之后要立即接档名
+-p: 使用原文件的原来属性
+-P: 可以使用绝对路径来压缩
+-N: 比后面接的日期(yyyy/mm/dd)还要新的才会被打包进新建的文件中
+
+c、x、t 只能存在一个
+
+tar -czvf xxx.tar.gz xxx | split -a 2 -b 200M -d  - xxx.tar.gz
+采用管道，其中 - 参数表示将所创建的文件输出到标准输出上
+
+cat xxx.tar.gz.* | tar -zxv
+```
